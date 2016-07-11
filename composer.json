@@ -1,0 +1,31 @@
+{
+    "name": "larium/pay",
+    "description": "A unified API to access different payment gateways.",
+    "keywords": ["payments", "merchant", "gateway"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Kollaros",
+            "email": "andreas@larium.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-curl": "*",
+        "ext-simplexml": "*",
+        "larium/credit-card": "@stable",
+        "larium/http-client": "~1.0"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Larium\\Pay\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Larium\\Pay\\": "tests/"
+        }
+    }
+}
