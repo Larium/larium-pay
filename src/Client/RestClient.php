@@ -10,20 +10,37 @@ class RestClient implements Client
 
     private $resource;
 
+    private $username;
+
+    private $pass;
+
     public function __construct($baseUri, $resource)
     {
         $this->baseUri = rtrim($baseUri, '/') . '/';
         $this->resource = $resource;
     }
 
-    public function get(array $payload = [])
+    public function get($id = null, array $payload = [])
     {
+        $conn = new Curl(
+            $this->getUri($id),
+            Curl::METHOD_GET
+        );
+        $this->authenticate($conn);
 
+        return $conn->execute();
     }
 
     public function post(array $payload)
     {
+        $conn = new Curl(
+            $this->getUri(),
+            Curl::METHOD_POST,
+            $payload
+        );
+        $this->authenticate($conn);
 
+        return $conn->execute();
     }
 
     public function put($id, array $payload)
@@ -45,5 +62,18 @@ class RestClient implements Client
         }
 
         return $uri;
+    }
+
+    public function setBasicAuthentication($username, $password)
+    {
+        $this->username = $username;
+        $this->pass = $password;
+    }
+
+    private function authenticate(Curl $conn)
+    {
+        if ($this->username || $this->pass) {
+            $conn->setBasicAuthentication($this->username, $this->pass);
+        }
     }
 }

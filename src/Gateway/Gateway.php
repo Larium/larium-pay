@@ -5,6 +5,7 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Transaction\Void;
+use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Purchase;
@@ -14,6 +15,13 @@ use Larium\Pay\Exception\NotImplementedException;
 
 abstract class Gateway
 {
+    protected $options;
+
+    public function __construct(array $options = [])
+    {
+        $this->options = $options;
+    }
+
     public function execute(Transaction $transaction)
     {
         $transaction->commit();
@@ -69,5 +77,10 @@ abstract class Gateway
         throw new NotImplementedException(
             sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
         );
+    }
+
+    protected function createRestClient($uri, $resource)
+    {
+        return new RestClient($uri, $resource);
     }
 }
