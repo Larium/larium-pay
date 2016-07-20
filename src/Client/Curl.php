@@ -38,12 +38,25 @@ class Curl
         CURLOPT_FRESH_CONNECT   => 1,
         CURLOPT_CONNECTTIMEOUT  => 5,
         CURLOPT_TIMEOUT         => 7,
+        CURLOPT_SSL_VERIFYPEER  => 0,
     ];
 
     private $body;
 
-    public function __construct($uri, $method, $body = null, array $headers = [], array $options = [])
-    {
+    /**
+     * @param string $uri
+     * @param string $method
+     * @param string $body
+     * @param array $headers
+     * @param array $options
+     */
+    public function __construct(
+        $uri,
+        $method,
+        $body = null,
+        array $headers = [],
+        array $options = []
+    ) {
         $this->setUri($uri);
         $this->body = $this->resolveBody($body);
         $this->setHttpMethod($method);
