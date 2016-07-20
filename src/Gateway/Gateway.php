@@ -4,6 +4,7 @@
 
 namespace Larium\Pay\Gateway;
 
+use Larium\Pay\Response;
 use Larium\Pay\Transaction\Void;
 use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Refund;
@@ -82,5 +83,23 @@ abstract class Gateway
     protected function createRestClient($uri, $resource)
     {
         return new RestClient($uri, $resource);
+    }
+
+    protected function createResponse(
+        $success,
+        $message,
+        $transactionId,
+        $errorCode = '0',
+        $responseCode = null,
+        array $payload = []
+    ) {
+        return new Response(
+            $success,
+            $message,
+            $transactionId,
+            $errorCode,
+            $responseCode,
+            $payload
+        );
     }
 }

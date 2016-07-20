@@ -4,7 +4,6 @@
 
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Response;
 use Larium\Pay\Client\Client;
 
 abstract class RestGateway extends Gateway
@@ -35,7 +34,7 @@ abstract class RestGateway extends Gateway
     {
         $responseBody = json_decode($response['body'], true);
 
-        $gatewayResponse = new Response(
+        $gatewayResponse = $this->createResponse(
             $this->success($responseBody),
             $this->message($responseBody),
             $this->transactionId($responseBody),
