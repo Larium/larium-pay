@@ -6,6 +6,8 @@ namespace Larium\Pay\Transaction;
 
 class VoidTransaction implements Void
 {
+    use Commit;
+
     private $transactionId;
 
     public function __construct($transactionId)
@@ -16,5 +18,10 @@ class VoidTransaction implements Void
     public function getTransactionId()
     {
         return $this->transactionId;
+    }
+
+    public function canCommit()
+    {
+        return $this->transactionId !== null;
     }
 }
