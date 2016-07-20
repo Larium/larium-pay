@@ -8,14 +8,14 @@ abstract class ReferenceTransaction implements Transaction
 {
     use Commit;
 
-    private $transactionId;
+    private $id;
 
     private $amount;
 
-    public function __construct($amount, $transactionId)
+    public function __construct($amount, $id)
     {
         $this->amount = $amount;
-        $this->transactionId = $transactionId;
+        $this->id = $id;
     }
 
     public function getAmount()
@@ -23,14 +23,14 @@ abstract class ReferenceTransaction implements Transaction
         return $this->amount;
     }
 
-    public function getTransactionId()
+    public function getId()
     {
-        return $this->transactionId;
+        return $this->id;
     }
 
     public function canCommit()
     {
         return $this->amount > 0
-            && $this->transactionId !== null;
+            && $this->id !== null;
     }
 }

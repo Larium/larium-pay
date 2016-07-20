@@ -6,15 +6,15 @@ namespace Larium\Pay\Transaction;
 
 class VoidTransaction implements Void
 {
-    private $transactionId;
+    private $id;
 
-    public function __construct($transactionId)
+    public function __construct($id)
     {
-        $this->transactionId = $transactionId;
+        $this->id = $id;
     }
 
-    public function getTransactionId()
+    public function getId()
     {
-        return $this->transactionId;
+        return $this->id;
     }
 }

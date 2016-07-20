@@ -6,7 +6,7 @@ namespace Larium\Pay\Transaction;
 
 interface Reference
 {
-    public function getTransactionId();
+    public function getId();
 
     public function getAmount();
 }

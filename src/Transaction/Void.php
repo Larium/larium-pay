@@ -6,5 +6,5 @@ namespace Larium\Pay\Transaction;
 
 interface Void
 {
-    public function getTransactionId();
+    public function getId();
 }
