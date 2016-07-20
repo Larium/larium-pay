@@ -38,7 +38,6 @@ class Curl
         CURLOPT_FRESH_CONNECT   => 1,
         CURLOPT_CONNECTTIMEOUT  => 5,
         CURLOPT_TIMEOUT         => 7,
-        CURLOPT_SSL_VERIFYPEER  => 0,
     ];
 
     private $body;

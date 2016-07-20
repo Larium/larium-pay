@@ -65,7 +65,7 @@ class RestClient implements Client
         $uri = sprintf('%s%s', $this->baseUri, $this->resource);
 
         if ($id) {
-            $uri .= "/$id";
+            $uri = sprintf($uri, $id);
         }
 
         return $uri;

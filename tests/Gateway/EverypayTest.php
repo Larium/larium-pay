@@ -5,13 +5,14 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Card;
+use Larium\Pay\TestCase;
 use Larium\Pay\Transaction\VoidTransaction;
 use Larium\Pay\Transaction\RefundTransaction;
 use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
 use Larium\Pay\Transaction\AuthorizeTransaction;
 
-class EverypayTest extends \PHPUnit_Framework_TestCase
+class EverypayTest extends TestCase
 {
     public function testPurchaseMethod()
     {

@@ -30,11 +30,11 @@ abstract class RestGateway extends Gateway
         return $client;
     }
 
-    protected function getResponse(array $response, callable $callback = null)
+    protected function getResponse(array $response)
     {
         $responseBody = json_decode($response['body'], true);
 
-        $gatewayResponse = $this->createResponse(
+        return $this->createResponse(
             $this->success($responseBody),
             $this->message($responseBody),
             $this->transactionId($responseBody),
@@ -42,11 +42,5 @@ abstract class RestGateway extends Gateway
             $this->responseCode($responseBody),
             $responseBody
         );
-
-        if ($callback) {
-            return $callback($gatewayResponse, $responseBody);
-        }
-
-        return $gatewayResponse;
     }
 }

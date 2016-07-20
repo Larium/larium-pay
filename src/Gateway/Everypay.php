@@ -16,15 +16,15 @@ class Everypay extends RestGateway
     const URI = 'https://api.everypay.gr';
 
     const SALE = 'payments';
-    const CREDIT = 'payments/refund';
-    const CAPTURE = 'payments/capture';
+    const CREDIT = 'payments/refund/%s';
+    const CAPTURE = 'payments/capture/%s';
 
     protected function getBaseUri()
     {
         return self::URI;
     }
 
-    protected function purchase(Purchase $transaction, callable $callback = null)
+    protected function purchase(Purchase $transaction)
     {
         $payload = $this->sale($transaction);
 
@@ -32,10 +32,10 @@ class Everypay extends RestGateway
 
         $response = $client->post($payload);
 
-        return $this->getResponse($response, $callback);
+        return $this->getResponse($response);
     }
 
-    protected function authorize(Authorize $transaction, callable $callback = null)
+    protected function authorize(Authorize $transaction)
     {
         $payload = $this->sale($transaction);
 
@@ -45,28 +45,28 @@ class Everypay extends RestGateway
 
         $response = $client->post($payload);
 
-        return $this->getResponse($response, $callback);
+        return $this->getResponse($response);
     }
 
-    protected function capture(Capture $transaction, callable $callback = null)
+    protected function capture(Capture $transaction)
     {
-        $response = $this->getRestClient(self::CAPTURE)->put($transaction->getTransactionId());
+        $response = $this->getRestClient(self::CAPTURE)->put($transaction->getId());
 
-        return $this->getResponse($response, $callback);
+        return $this->getResponse($response);
     }
 
-    protected function refund(Refund $transaction, callable $callback = null)
+    protected function refund(Refund $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)->put($transaction->getTransactionId());
+        $response = $this->getRestClient(self::CREDIT)->put($transaction->getId());
 
-        return $this->getResponse($response, $callback);
+        return $this->getResponse($response);
     }
 
-    protected function void(Void $transaction, callable $callback = null)
+    protected function void(Void $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)->put($transaction->getTransactionId());
+        $response = $this->getRestClient(self::CREDIT)->put($transaction->getId());
 
-        return $this->getResponse($response, $callback);
+        return $this->getResponse($response);
     }
 
     private function sale($transaction)
