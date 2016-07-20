@@ -17,4 +17,9 @@ class VoidTransaction implements Void
     {
         return $this->id;
     }
+
+    public function canCommit()
+    {
+        return $this->transactionId !== null;
+    }
 }

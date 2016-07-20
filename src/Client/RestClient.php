@@ -43,9 +43,16 @@ class RestClient implements Client
         return $conn->execute();
     }
 
-    public function put($id, array $payload)
+    public function put($id, array $payload = [])
     {
+        $conn = new Curl(
+            $this->getUri($id),
+            Curl::METHOD_PUT,
+            $payload
+        );
+        $this->authenticate($conn);
 
+        return $conn->execute();
     }
 
     public function delete($id)

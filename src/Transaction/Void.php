@@ -4,7 +4,7 @@
 
 namespace Larium\Pay\Transaction;
 
-interface Void
+interface Void extends Transaction
 {
     public function getId();
 }
