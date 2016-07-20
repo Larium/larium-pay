@@ -1,0 +1,4 @@
+[everypay]
+secret_key = ''
+[stripe]
+sk = ''
