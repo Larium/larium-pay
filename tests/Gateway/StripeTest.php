@@ -13,12 +13,12 @@ class StripeTest extends TestCase
 {
     public function testPurchaseMethod()
     {
-        $stripe = $this->createGateway(function ($response, $raw) {
-            return $raw;
-        });
+        $stripe = $this->createGateway();
 
         $txn = new PurchaseTransaction(1000, $this->getCard());
-        $response = $stripe->execute($txn);
+        $response = $stripe->execute($txn, function ($response, $raw) {
+            return $raw;
+        });
 
         print_r($response);
     }
@@ -45,11 +45,11 @@ class StripeTest extends TestCase
         ]);
     }
 
-    private function createGateway(callable $callback = null)
+    private function createGateway()
     {
         $credentials = $this->getFixture('stripe');
         $options = ['sk' => $credentials['sk']];
 
-        return new Stripe($options, $callback);
+        return new Stripe($options);
     }
 }

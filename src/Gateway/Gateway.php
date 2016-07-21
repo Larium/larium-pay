@@ -20,15 +20,17 @@ abstract class Gateway
 
     private $responseCallback;
 
-    public function __construct(array $options = [], callable $responseCallback = null)
+    final public function __construct(array $options = [])
     {
         $this->options = $options;
 
-        $this->responseCallback = $responseCallback;
     }
 
-    public function execute(Transaction $transaction)
-    {
+    public function execute(
+        Transaction $transaction,
+        callable $responseCallback = null
+    ) {
+        $this->responseCallback = $responseCallback;
         $transaction->commit();
 
         switch (true) {
