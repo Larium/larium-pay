@@ -4,13 +4,18 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
+
 class VoidTransaction implements Void
 {
     private $id;
 
-    public function __construct($id)
+    private $extraOptions;
+
+    public function __construct($id, array $extraOptions = [])
     {
         $this->id = $id;
+        $this->extraOptions = new ParamsBag($extraOptions);
     }
 
     public function getId()
