@@ -42,4 +42,9 @@ interface Sale extends Transaction
      * @return string
      */
     public function getCustomerEmail();
+
+    /**
+     * @return Larium\Pay\ParamsBag
+     */
+    public function getExtraOptions();
 }

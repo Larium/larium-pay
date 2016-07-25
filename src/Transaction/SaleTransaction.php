@@ -4,6 +4,7 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
 use Larium\Pay\CardReference;
 use Larium\Pay\Transaction\Sale;
 
@@ -46,10 +47,19 @@ abstract class SaleTransaction implements Sale
      */
     private $customerEmail;
 
-    public function __construct($amount, CardReference $card)
-    {
+    /**
+     * @var Larium\Pay\ParamsBag
+     */
+    private $extraOptions;
+
+    public function __construct(
+        $amount,
+        CardReference $card,
+        array $extraOptions = []
+    ) {
         $this->amount = $amount;
         $this->card = $card;
+        $this->extraOptions = new ParamsBag($extraOptions);
     }
 
     /**
@@ -142,5 +152,10 @@ abstract class SaleTransaction implements Sale
     {
         return $this->card instanceof CardReference
             && $this->amount > 0;
+    }
+
+    public function getExtraOptions()
+    {
+        return $this->extraOptions;
     }
 }
