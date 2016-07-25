@@ -19,7 +19,25 @@ interface Sale extends Transaction
     public function getAmount();
 
     /**
-     * @return array
+     * @return string
+     */
+    public function getCurrency();
+
+    /**
+     * Address should have the following keys:
+     * <code>
+     *      $address['name']
+     *      $address['company']
+     *      $address['address1']
+     *      $address['address2']
+     *      $address['city']
+     *      $address['state']
+     *      $address['country']
+     *      $address['zip']
+     *      $address['phone']
+     * </code>
+     *
+     * @return Larium\Pay\ParamsBag
      */
     public function getAddress();
 

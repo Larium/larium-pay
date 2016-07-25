@@ -18,6 +18,11 @@ abstract class SaleTransaction implements Sale
     private $amount = 0;
 
     /**
+     * @var string
+     */
+    private $currency = 'EUR';
+
+    /**
      * @var CardReference
      */
     private $card;
@@ -60,6 +65,7 @@ abstract class SaleTransaction implements Sale
         $this->amount = $amount;
         $this->card = $card;
         $this->extraOptions = new ParamsBag($extraOptions);
+        $this->address = new ParamsBag();
     }
 
     /**
@@ -79,7 +85,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return array
+     * @return Larium\Pay\ParamsBag
      */
     public function getAddress()
     {
@@ -89,7 +95,7 @@ abstract class SaleTransaction implements Sale
     public function setAddress(array $address)
     {
         $this->allowChanges();
-        $this->address = $address;
+        $this->address = new ParamsBag($address);
     }
 
     /**
@@ -157,5 +163,16 @@ abstract class SaleTransaction implements Sale
     public function getExtraOptions()
     {
         return $this->extraOptions;
+    }
+
+    public function setCurrency($currency)
+    {
+        $this->allowChanges();
+        $this->currency = $curreny;
+    }
+
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

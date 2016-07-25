@@ -18,6 +18,16 @@ class StripeTest extends TestCase
         });
 
         $txn = new PurchaseTransaction(1000, $this->getCard());
+        $address = [
+            'name' => 'John Doe',
+            'city' => 'Athens',
+            'country' => 'GR',
+            'address1' => 'Ermou 14',
+            'zip' => '12345',
+            'state' => 'Attiki',
+            'phone' => '+302112121211',
+        ];
+        $txn->setAddress($address);
         $response = $stripe->execute($txn);
 
         print_r($response);

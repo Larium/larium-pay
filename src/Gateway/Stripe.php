@@ -7,6 +7,7 @@ namespace Larium\Pay\Gateway;
 use Larium\Pay\Client\Client;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Purchase;
+use Larium\Pay\Transaction\Authorize;
 
 class Stripe extends RestGateway
 {
@@ -15,6 +16,8 @@ class Stripe extends RestGateway
     const PURCHASE = 'charges';
     const REFUND = 'refunds';
 
+    private $payload;
+
     protected function getBaseUri()
     {
         return self::URI;
@@ -22,11 +25,43 @@ class Stripe extends RestGateway
 
     protected function purchase(Purchase $transaction)
     {
+        $this->sale($transaction);
+
+        $response = $this->getRestClient(self::PURCHASE)
+            ->post($this->payload);
+
+        return $this->getResponse($response);
+    }
+
+    protected function authorize(Authorize $transaction)
+    {
+
+    }
+
+    private function sale($transaction)
+    {
         $card = $transaction->getCardReference();
 
-        $payload = [
+        $this->payload = [
             'amount' => $transaction->getAmount(),
-            'currency' => 'gbp',
+            'currency' => strtolower($transaction->getCurrency()),
+        ];
+
+        $this->setPaySource($card);
+        $this->setAddress($transaction);
+    }
+
+    private function setPaySource($card)
+    {
+        if ($card->getToken() !== null) {
+            $source = [
+                'customer' => $card->getToken(),
+            ];
+
+            return $this->payload = array_merge($this->payload, $source);
+        }
+
+        $source = [
             'source' => [
                 'exp_month' => $card->getMonth(),
                 'exp_year' => $card->getYear(),
@@ -36,10 +71,31 @@ class Stripe extends RestGateway
             ]
         ];
 
-        $response = $this->getRestClient(self::PURCHASE)
-            ->post($payload);
+        return $this->payload = array_merge($this->payload, $source);
+    }
 
-        return $this->getResponse($response);
+    private function setAddress($transaction)
+    {
+        $address = $transaction->getAddress();
+        $extra = $transaction->getExtraOptions();
+        $shipping = [
+            'shipping' => [
+                'address' => [
+                    'city' => $address->get('city'),
+                    'country' => $address->get('country'),
+                    'line1' => $address->get('address1'),
+                    'line2' => $address->get('address2'),
+                    'postal_code' => $address->get('zip'),
+                    'state' => $address->get('state'),
+                ],
+                'carrier' => $extra->get('carrier'),
+                'name' => $address->get('name'),
+                'phone' => $address->get('phone'),
+                'tracking_number' => $extra->get('tracking_number'),
+            ]
+        ];
+
+        $this->payload = array_merge($this->payload, $shipping);
     }
 
     public function refund(Refund $transaction)
