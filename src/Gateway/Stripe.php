@@ -6,6 +6,7 @@ namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\Client;
 use Larium\Pay\Transaction\Refund;
+use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Purchase;
 use Larium\Pay\Transaction\Authorize;
 
@@ -13,8 +14,9 @@ class Stripe extends RestGateway
 {
     const URI = 'https://api.stripe.com/v1';
 
-    const PURCHASE = 'charges';
     const REFUND = 'refunds';
+    const CAPTURE = 'charges/%s/capture';
+    const PURCHASE = 'charges';
 
     private $payload;
 
@@ -35,7 +37,77 @@ class Stripe extends RestGateway
 
     protected function authorize(Authorize $transaction)
     {
+        $this->sale($transaction);
+        $this->payload['capture'] = 'false';
 
+        $response = $this->getRestClient(self::PURCHASE)
+            ->post($this->payload);
+
+        return $this->getResponse($response);
+    }
+
+    protected function capture(Capture $transaction)
+    {
+        $this->payload = [
+            'amount' => $transaction->getAmount(),
+        ];
+
+        $resource = sprintf(self::CAPTURE, $transaction->getId());
+
+        $response = $this->getRestClient($resource)
+            ->post($this->payload);
+
+        return $this->getResponse($response);
+    }
+
+    protected function refund(Refund $transaction)
+    {
+        $payload = [
+            'amount' => $transaction->getAmount(),
+            'charge' => $transaction->getId()
+        ];
+
+        $response = $this->getRestClient(self::REFUND)
+            ->post($payload);
+
+
+        return $this->getResponse($response);
+    }
+
+    protected function authenticate(Client $client)
+    {
+        $client->setBasicAuthentication($this->options['sk'], null);
+    }
+
+    protected function success(array $responseBody)
+    {
+        return !isset($responseBody['error']);
+    }
+
+    protected function message(array $responseBody)
+    {
+        return $this->success($responseBody)
+            ? $responseBody['status']
+            : $responseBody['error']['message'];
+    }
+
+    protected function transactionId(array $responseBody)
+    {
+        return $this->success($responseBody)
+            ? $responseBody['id']
+            : null;
+    }
+
+    protected function errorCode(array $responseBody)
+    {
+        return $this->success($responseBody)
+            ? 0
+            : $responseBody['error']['type'];
+    }
+
+    protected function responseCode(array $responseBody)
+    {
+        return null;
     }
 
     private function sale($transaction)
@@ -96,55 +168,5 @@ class Stripe extends RestGateway
         ];
 
         $this->payload = array_merge($this->payload, $shipping);
-    }
-
-    public function refund(Refund $transaction)
-    {
-        $payload = [
-            'amount' => $transaction->getAmount(),
-            'charge' => $transaction->getId()
-        ];
-
-        $response = $this->getRestClient(self::REFUND)
-            ->post($payload);
-
-
-        return $this->getResponse($response);
-    }
-
-    protected function authenticate(Client $client)
-    {
-        $client->setBasicAuthentication($this->options['sk'], null);
-    }
-
-    protected function success(array $responseBody)
-    {
-        return !isset($responseBody['error']);
-    }
-
-    protected function message(array $responseBody)
-    {
-        return $this->success($responseBody)
-            ? $responseBody['status']
-            : $responseBody['error']['message'];
-    }
-
-    protected function transactionId(array $responseBody)
-    {
-        return $this->success($responseBody)
-            ? $responseBody['id']
-            : null;
-    }
-
-    protected function errorCode(array $responseBody)
-    {
-        return $this->success($responseBody)
-            ? 0
-            : $responseBody['error']['type'];
-    }
-
-    protected function responseCode(array $responseBody)
-    {
-        return null;
     }
 }

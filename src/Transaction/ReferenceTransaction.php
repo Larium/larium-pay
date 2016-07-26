@@ -4,6 +4,8 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
+
 abstract class ReferenceTransaction implements Transaction
 {
     use Commit;

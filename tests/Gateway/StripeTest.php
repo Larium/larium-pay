@@ -7,15 +7,15 @@ namespace Larium\Pay\Gateway;
 use Larium\Pay\Card;
 use Larium\Pay\TestCase;
 use Larium\Pay\Transaction\RefundTransaction;
+use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
+use Larium\Pay\Transaction\AuthorizeTransaction;
 
 class StripeTest extends TestCase
 {
     public function testPurchaseMethod()
     {
-        $stripe = $this->createGateway(function ($response, $raw) {
-            return $raw;
-        });
+        $stripe = $this->createGateway();
 
         $txn = new PurchaseTransaction(1000, $this->getCard());
         $address = [
@@ -28,6 +28,26 @@ class StripeTest extends TestCase
             'phone' => '+302112121211',
         ];
         $txn->setAddress($address);
+        $response = $stripe->execute($txn);
+
+        print_r($response);
+    }
+
+    public function testAuthorizeMethod()
+    {
+        $stripe = $this->createGateway();
+        $txn = new AuthorizeTransaction(1000, $this->getCard());
+        $response = $stripe->execute($txn);
+
+        print_r($response);
+    }
+
+    public function testCaptureMethod()
+    {
+        $stripe = $this->createGateway();
+
+        $txnId = 'ch_18bXOXKH7mEy5bci9i39sqFU';
+        $txn = new CaptureTransaction(1000, $txnId);
         $response = $stripe->execute($txn);
 
         print_r($response);
