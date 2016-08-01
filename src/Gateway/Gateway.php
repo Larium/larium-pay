@@ -7,7 +7,6 @@ namespace Larium\Pay\Gateway;
 use Larium\Pay\Response;
 use Larium\Pay\ParamsBag;
 use Larium\Pay\Transaction\Void;
-use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Purchase;
