@@ -28,6 +28,7 @@ abstract class ReferenceTransaction implements Transaction
     public function __construct($amount, $id, array $extraOptions = [])
     {
         $this->id = $id;
+        $this->amount = $amount;
         $this->extraOptions = new ParamsBag($extraOptions);
     }
 

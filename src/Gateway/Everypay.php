@@ -52,21 +52,24 @@ class Everypay extends RestGateway
 
     protected function capture(Capture $transaction)
     {
-        $response = $this->getRestClient(self::CAPTURE)->put($transaction->getId());
+        $response = $this->getRestClient(self::CAPTURE)
+            ->put($transaction->getId());
 
         return $this->getResponse($response);
     }
 
     protected function refund(Refund $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)->put($transaction->getId());
+        $response = $this->getRestClient(self::CREDIT)
+            ->put($transaction->getId());
 
         return $this->getResponse($response);
     }
 
     protected function void(Void $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)->put($transaction->getId());
+        $response = $this->getRestClient(self::CREDIT)
+            ->put($transaction->getId());
 
         return $this->getResponse($response);
     }

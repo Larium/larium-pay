@@ -46,7 +46,7 @@ class StripeTest extends TestCase
     {
         $stripe = $this->createGateway();
 
-        $txnId = 'ch_18bXOXKH7mEy5bci9i39sqFU';
+        $txnId = 'ch_18dmzlKH7mEy5bcipsNkfMhm';
         $txn = new CaptureTransaction(1000, $txnId);
         $response = $stripe->execute($txn);
 
