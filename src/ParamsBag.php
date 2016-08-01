@@ -4,7 +4,10 @@
 
 namespace Larium\Pay;
 
-class ParamsBag
+use Iterator;
+use ArrayAccess;
+
+class ParamsBag implements Iterator, ArrayAccess
 {
     /**
      * The array of option values.

@@ -137,6 +137,8 @@ class Curl
         if (is_array($body)) {
             return http_build_query($body);
         }
+
+        return $body;
     }
 
     private function resolveResponse($result)

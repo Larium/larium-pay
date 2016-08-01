@@ -5,6 +5,7 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Response;
+use Larium\Pay\ParamsBag;
 use Larium\Pay\Transaction\Void;
 use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Refund;
@@ -20,16 +21,16 @@ abstract class Gateway
 
     private $responseCallback;
 
-    public function __construct(array $options = [], callable $responseCallback = null)
+    public function __construct(array $options = [])
     {
-        $this->options = $options;
-
-        $this->responseCallback = $responseCallback;
+        $this->options = new ParamsBag($options);
     }
 
-    public function execute(Transaction $transaction)
+    public function execute(Transaction $transaction, callable $responseCallback = null)
     {
         $transaction->commit();
+
+        $this->responseCallback = $responseCallback;
 
         switch (true) {
             case $transaction instanceof Purchase:
@@ -82,11 +83,6 @@ abstract class Gateway
         throw new NotImplementedException(
             sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
         );
-    }
-
-    protected function createRestClient($uri, $resource)
-    {
-        return new RestClient($uri, $resource);
     }
 
     protected function createResponse(

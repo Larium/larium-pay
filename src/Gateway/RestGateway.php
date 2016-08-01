@@ -5,6 +5,7 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\Client;
+use Larium\Pay\Client\RestClient;
 
 abstract class RestGateway extends Gateway
 {
@@ -28,6 +29,11 @@ abstract class RestGateway extends Gateway
         $this->authenticate($client);
 
         return $client;
+    }
+
+    protected function createRestClient($uri, $resource)
+    {
+        return new RestClient($uri, $resource);
     }
 
     protected function getResponse(array $response)
