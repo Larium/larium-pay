@@ -27,4 +27,9 @@ class VoidTransaction implements Void
     {
         return $this->transactionId !== null;
     }
+
+    public function getExtraOptions()
+    {
+        return $this->extraOptions;
+    }
 }

@@ -14,11 +14,9 @@ class Stripe extends RestGateway
 {
     const URI = 'https://api.stripe.com/v1';
 
+    const SALE = 'charges';
     const REFUND = 'refunds';
     const CAPTURE = 'charges/%s/capture';
-    const PURCHASE = 'charges';
-
-    private $payload;
 
     protected function getBaseUri()
     {
@@ -52,10 +50,8 @@ class Stripe extends RestGateway
             'amount' => $transaction->getAmount(),
         ];
 
-        $resource = sprintf(self::CAPTURE, $transaction->getId());
-
-        $response = $this->getRestClient($resource)
-            ->post($this->payload);
+        $response = $this->getRestClient(self::SALE)
+            ->post($payload);
 
         return $this->getResponse($response);
     }

@@ -10,9 +10,15 @@ abstract class ReferenceTransaction implements Transaction
 {
     use Commit;
 
+    /**
+     * @var string
+     */
     private $id;
 
-    private $amount;
+    /**
+     * @var int
+     */
+    private $amount = 0;
 
     /**
      * @var Larium\Pay\ParamsBag
@@ -21,7 +27,6 @@ abstract class ReferenceTransaction implements Transaction
 
     public function __construct($amount, $id, array $extraOptions = [])
     {
-        $this->amount = $amount;
         $this->id = $id;
         $this->extraOptions = new ParamsBag($extraOptions);
     }
