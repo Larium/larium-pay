@@ -14,41 +14,63 @@ class RestClient implements Client
 
     private $pass;
 
-    public function __construct($baseUri, $resource)
-    {
+    private $headers = [];
+
+    private $options = [];
+
+    public function __construct(
+        $baseUri,
+        $resource,
+        array $headers = [],
+        array $options = []
+    ) {
         $this->baseUri = rtrim($baseUri, '/') . '/';
         $this->resource = $resource;
+        $this->headers = $headers;
+        $this->options = $options;
     }
 
-    public function get($id = null, array $payload = [])
+    public function addHeader($name, $value)
+    {
+        $this->headers[] = "{$name}: {$value}";
+    }
+
+    public function get($id = null, $payload = null)
     {
         $conn = new Curl(
             $this->getUri($id),
-            Curl::METHOD_GET
+            Curl::METHOD_GET,
+            null,
+            $this->headers,
+            $this->options
         );
         $this->authenticate($conn);
 
         return $conn->execute();
     }
 
-    public function post(array $payload)
+    public function post($payload)
     {
         $conn = new Curl(
             $this->getUri(),
             Curl::METHOD_POST,
-            $payload
+            $payload,
+            $this->headers,
+            $this->options
         );
         $this->authenticate($conn);
 
         return $conn->execute();
     }
 
-    public function put($id, array $payload = [])
+    public function put($id, $payload)
     {
         $conn = new Curl(
             $this->getUri($id),
             Curl::METHOD_PUT,
-            $payload
+            $payload,
+            $this->headers,
+            $this->options
         );
         $this->authenticate($conn);
 

@@ -4,6 +4,8 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
+
 abstract class ReferenceTransaction implements Transaction
 {
     use Commit;
@@ -12,10 +14,16 @@ abstract class ReferenceTransaction implements Transaction
 
     private $amount;
 
-    public function __construct($amount, $id)
+    /**
+     * @var Larium\Pay\ParamsBag
+     */
+    private $extraOptions;
+
+    public function __construct($amount, $id, array $extraOptions = [])
     {
         $this->amount = $amount;
         $this->id = $id;
+        $this->extraOptions = new ParamsBag($extraOptions);
     }
 
     public function getAmount()
@@ -32,5 +40,10 @@ abstract class ReferenceTransaction implements Transaction
     {
         return $this->amount > 0
             && $this->id !== null;
+    }
+
+    public function getExtraOptions()
+    {
+        return $this->extraOptions;
     }
 }

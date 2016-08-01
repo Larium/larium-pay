@@ -7,7 +7,9 @@ namespace Larium\Pay\Gateway;
 use Larium\Pay\Card;
 use Larium\Pay\TestCase;
 use Larium\Pay\Transaction\RefundTransaction;
+use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
+use Larium\Pay\Transaction\AuthorizeTransaction;
 
 class StripeTest extends TestCase
 {
@@ -16,9 +18,37 @@ class StripeTest extends TestCase
         $stripe = $this->createGateway();
 
         $txn = new PurchaseTransaction(1000, $this->getCard());
-        $response = $stripe->execute($txn, function ($response, $raw) {
-            return $raw;
-        });
+        $address = [
+            'name' => 'John Doe',
+            'city' => 'Athens',
+            'country' => 'GR',
+            'address1' => 'Ermou 14',
+            'zip' => '12345',
+            'state' => 'Attiki',
+            'phone' => '+302112121211',
+        ];
+        $txn->setAddress($address);
+        $response = $stripe->execute($txn);
+
+        print_r($response);
+    }
+
+    public function testAuthorizeMethod()
+    {
+        $stripe = $this->createGateway();
+        $txn = new AuthorizeTransaction(1000, $this->getCard());
+        $response = $stripe->execute($txn);
+
+        print_r($response);
+    }
+
+    public function testCaptureMethod()
+    {
+        $stripe = $this->createGateway();
+
+        $txnId = 'ch_18bXOXKH7mEy5bci9i39sqFU';
+        $txn = new CaptureTransaction(1000, $txnId);
+        $response = $stripe->execute($txn);
 
         print_r($response);
     }
@@ -45,11 +75,11 @@ class StripeTest extends TestCase
         ]);
     }
 
-    private function createGateway()
+    private function createGateway(callable $callback = null)
     {
         $credentials = $this->getFixture('stripe');
         $options = ['sk' => $credentials['sk']];
 
-        return new Stripe($options);
+        return new Stripe($options, $callback);
     }
 }

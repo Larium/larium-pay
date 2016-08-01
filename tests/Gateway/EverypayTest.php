@@ -89,7 +89,7 @@ class EverypayTest extends TestCase
 
     private function createGateway()
     {
-        $options = ['secret_key' => 'sk_9Nusr2Be5hYPt4ZJgoBDce4qR2sqfSfd'];
+        $options = ['secret_key' => ''];
 
         return new Everypay($options);
     }

@@ -4,6 +4,7 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
 use Larium\Pay\CardReference;
 use Larium\Pay\Transaction\Sale;
 
@@ -15,6 +16,11 @@ abstract class SaleTransaction implements Sale
      * @var int
      */
     private $amount = 0;
+
+    /**
+     * @var string
+     */
+    private $currency = 'EUR';
 
     /**
      * @var CardReference
@@ -46,10 +52,20 @@ abstract class SaleTransaction implements Sale
      */
     private $customerEmail;
 
-    public function __construct($amount, CardReference $card)
-    {
+    /**
+     * @var Larium\Pay\ParamsBag
+     */
+    private $extraOptions;
+
+    public function __construct(
+        $amount,
+        CardReference $card,
+        array $extraOptions = []
+    ) {
         $this->amount = $amount;
         $this->card = $card;
+        $this->extraOptions = new ParamsBag($extraOptions);
+        $this->address = new ParamsBag();
     }
 
     /**
@@ -69,7 +85,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return array
+     * @return Larium\Pay\ParamsBag
      */
     public function getAddress()
     {
@@ -79,7 +95,7 @@ abstract class SaleTransaction implements Sale
     public function setAddress(array $address)
     {
         $this->allowChanges();
-        $this->address = $address;
+        $this->address = new ParamsBag($address);
     }
 
     /**
@@ -142,5 +158,21 @@ abstract class SaleTransaction implements Sale
     {
         return $this->card instanceof CardReference
             && $this->amount > 0;
+    }
+
+    public function getExtraOptions()
+    {
+        return $this->extraOptions;
+    }
+
+    public function setCurrency($currency)
+    {
+        $this->allowChanges();
+        $this->currency = $curreny;
+    }
+
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }
