@@ -24,10 +24,16 @@ interface Transaction
      */
     public function canCommit();
 
+    /**
+     * Checks if transaction is committed or not.
+     *
+     * @return bool
+     */
     public function isCommitted();
 
     /**
-     * Checks if further changes allowed for this transaction.
+     * Checks if further changes allowed for this transaction, meaning that it is
+     * not committed yet.
      *
      * @throws RuntimeException
      *
