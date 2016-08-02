@@ -13,11 +13,13 @@ use Larium\Pay\Transaction\AuthorizeTransaction;
 
 class StripeTest extends TestCase
 {
+    const AMOUNT = 1000;
+
     public function testPurchaseMethod()
     {
         $stripe = $this->createGateway();
 
-        $txn = new PurchaseTransaction(1000, $this->getCard());
+        $txn = new PurchaseTransaction(self::AMOUNT, $this->getCard());
         $address = [
             'name' => 'John Doe',
             'city' => 'Athens',
@@ -30,38 +32,46 @@ class StripeTest extends TestCase
         $txn->setAddress($address);
         $response = $stripe->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
+
+        return $response->getTransactionId();
     }
 
     public function testAuthorizeMethod()
     {
         $stripe = $this->createGateway();
-        $txn = new AuthorizeTransaction(1000, $this->getCard());
+        $txn = new AuthorizeTransaction(self::AMOUNT, $this->getCard());
         $response = $stripe->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
+
+        return $response->getTransactionId();
     }
 
-    public function testCaptureMethod()
+    /**
+     * @depends testAuthorizeMethod
+     */
+    public function testCaptureMethod($txnId)
     {
         $stripe = $this->createGateway();
 
-        $txnId = 'ch_18dmzlKH7mEy5bcipsNkfMhm';
-        $txn = new CaptureTransaction(1000, $txnId);
+        $txn = new CaptureTransaction(self::AMOUNT, $txnId);
         $response = $stripe->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
     }
 
-    public function testRefundMethod()
+    /**
+     * @depends testPurchaseMethod
+     */
+    public function testRefundMethod($txnId)
     {
         $stripe = $this->createGateway();
 
-        $txnId = 'ch_18ZSt6KH7mEy5bcimOcCzxs7';
-        $txn = new RefundTransaction(500, $txnId);
+        $txn = new RefundTransaction(self::AMOUNT, $txnId);
         $response = $stripe->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
     }
 
     private function getCard()
@@ -75,11 +85,11 @@ class StripeTest extends TestCase
         ]);
     }
 
-    private function createGateway(callable $callback = null)
+    private function createGateway()
     {
         $credentials = $this->getFixture('stripe');
         $options = ['sk' => $credentials['sk']];
 
-        return new Stripe($options, $callback);
+        return new Stripe($options);
     }
 }
