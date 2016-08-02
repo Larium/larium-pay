@@ -150,6 +150,12 @@ class Worldpay extends RestGateway
 
     protected function success(array $responseBody)
     {
+        if (isset($responseBody['paymentStatusReason'])
+            || isset($responseBody['iso8583Status'])
+        ) {
+            return false;
+        }
+
         $statusCode = isset($responseBody['httpStatusCode'])
             ? $responseBody['httpStatusCode']
             : 200;
@@ -194,6 +200,12 @@ class Worldpay extends RestGateway
 
     protected function responseCode(array $responseBody)
     {
+        if (isset($responseBody['iso8583Status'])
+            && preg_match("/(\d+)\s-/", $responseBody['iso8583Status'], $m)
+        ) {
+            return str_pad($m[1], 2, '0', STR_PAD_LEFT);
+        }
+
         return null;
     }
 }

@@ -71,10 +71,59 @@ class WorldpayTest extends TestCase
         $this->assertSuccess($response);
     }
 
+    public function testFailedPurchase()
+    {
+        $worldpay = $this->createGateway();
+
+        $amount = self::AMOUNT;
+        $txn = new PurchaseTransaction($amount, $this->getFailedCard());
+        $txn->setDescription('Test Worldpay order.');
+
+        $response = $worldpay->execute($txn);
+
+        $this->assertFailure($response);
+        $this->assertNotNull($response->getResponseCode());
+    }
+
+    public function testErrorPurchase()
+    {
+        $worldpay = $this->createGateway();
+
+        $amount = self::AMOUNT;
+        $txn = new PurchaseTransaction($amount, $this->getErrorCard());
+        $txn->setDescription('Test Worldpay order.');
+
+        $response = $worldpay->execute($txn);
+
+        $this->assertFailure($response);
+    }
+
     private function getCard()
     {
         return new Card([
             'name' => 'JOHN DOE',
+            'number' => '4444333322221111',
+            'month' => '01',
+            'year' => date('Y') + 1,
+            'cvv' => '123',
+        ]);
+    }
+
+    private function getFailedCard()
+    {
+        return new Card([
+            'name' => 'FAILED',
+            'number' => '4444333322221111',
+            'month' => '01',
+            'year' => date('Y') + 1,
+            'cvv' => '123',
+        ]);
+    }
+
+    private function getErrorCard()
+    {
+        return new Card([
+            'name' => 'ERROR',
             'number' => '4444333322221111',
             'month' => '01',
             'year' => date('Y') + 1,
