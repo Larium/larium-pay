@@ -6,14 +6,19 @@ namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\Client;
 use Larium\Pay\Client\RestClient;
+use Larium\Pay\Transaction\Refund;
+use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Purchase;
+use Larium\Pay\Transaction\Authorize;
 
 class Worldpay extends RestGateway
 {
     const URI = 'https://api.worldpay.com/v1/';
 
+    const SALE = 'orders';
     const TOKEN = 'tokens';
-    const PURCHASE = 'orders';
+    const REFUND = 'orders/%s/refund';
+    const CAPTURE = 'orders/%s/capture';
 
     private $payload = [];
 
@@ -28,16 +33,55 @@ class Worldpay extends RestGateway
 
         $payload = json_encode($this->payload);
 
-        $response = $this->getRestClient(self::PURCHASE)
+        $response = $this->getRestClient(self::SALE)
             ->post($payload);
 
         return $this->getResponse($response);
+    }
 
-        #$client = $this->getRestClient(self::SALE);
+    protected function authorize(Authorize $transaction)
+    {
+        $this->sale($transaction);
 
-        #$response = $client->post($this->payload);
+        $this->payload['authorizeOnly'] = true;
+        $payload = json_encode($this->payload);
 
-        #return $this->getResponse($response);
+        $response = $this->getRestClient(self::SALE)
+            ->post($payload);
+
+        return $this->getResponse($response);
+    }
+
+    protected function capture(Capture $transaction)
+    {
+        $payload = [
+            'captureAmount' => $transaction->getAmount(),
+        ];
+
+        $payload = json_encode($payload);
+
+        $resource = sprintf(self::CAPTURE, $transaction->getId());
+
+        $response = $this->getRestClient($resource)
+            ->post($payload);
+
+        return $this->getResponse($response);
+    }
+
+    protected function refund(Refund $transaction)
+    {
+        $payload = [
+            'refundAmount' => $transaction->getAmount(),
+        ];
+
+        $payload = json_encode($payload);
+
+        $resource = sprintf(self::REFUND, $transaction->getId());
+
+        $response = $this->getRestClient($resource)
+            ->post($payload);
+
+        return $this->getResponse($response);
     }
 
     private function sale($transaction)
@@ -132,9 +176,13 @@ class Worldpay extends RestGateway
             return null;
         }
 
-        return isset($responseBody['orderCode'])
-            ? $responseBody['orderCode']
-            : $responseBody['token'];
+        if (isset($responseBody['orderCode'])) {
+            return $responseBody['orderCode'];
+        }
+
+        if (isset($responseBody['token'])) {
+            return $responseBody['token'];
+        }
     }
 
     protected function errorCode(array $responseBody)

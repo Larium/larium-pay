@@ -119,7 +119,7 @@ abstract class RestGateway extends Gateway
      */
     protected function getResponse(array $response)
     {
-        $responseBody = json_decode($response['body'], true);
+        $responseBody = json_decode($response['body'], true) ?: [];
 
         return $this->createResponse(
             $this->success($responseBody),

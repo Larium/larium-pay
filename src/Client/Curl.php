@@ -150,6 +150,10 @@ class Curl
         $headers = $this->resolveResponseHeaders($headersString);
         $body = substr($result, -$info['size_download']);
 
+        if ($info['size_download'] == 0) {
+            $body = '';
+        }
+
         $response = [
             'status' => $statusCode,
             'headers' => $headers,
