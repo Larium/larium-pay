@@ -8,6 +8,8 @@ use Larium\Pay\ParamsBag;
 
 class VoidTransaction implements Void
 {
+    use Commit;
+
     private $id;
 
     private $extraOptions;
@@ -25,7 +27,7 @@ class VoidTransaction implements Void
 
     public function canCommit()
     {
-        return $this->transactionId !== null;
+        return $this->id !== null;
     }
 
     public function getExtraOptions()

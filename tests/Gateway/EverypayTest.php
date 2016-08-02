@@ -14,66 +14,80 @@ use Larium\Pay\Transaction\AuthorizeTransaction;
 
 class EverypayTest extends TestCase
 {
+    const AMOUNT = 1000;
+
     public function testPurchaseMethod()
     {
         $everypay = $this->createGateway();
 
-        $amount = 1000;
+        $amount = self::AMOUNT;
         $txn = new PurchaseTransaction($amount, $this->getCard());
 
         $response = $everypay->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
+
+        return $response->getTransactionId();
     }
 
     public function testAuthorizeMethod()
     {
         $everypay = $this->createGateway();
 
-        $amount = 1000;
+        $amount = self::AMOUNT;
         $txn = new AuthorizeTransaction($amount, $this->getCard());
 
         $response = $everypay->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
+
+        return $response->getTransactionId();
     }
 
-    public function testCaptureMethod()
+    /**
+     * @depends testAuthorizeMethod
+     */
+    public function testCaptureMethod($txnId)
     {
         $everypay = $this->createGateway();
 
-        $amount = 1000;
-        $txnId = 'pmt_3FaqkPQHQhjUmAUumyncjc7P';
+        $amount = self::AMOUNT;
         $txn = new CaptureTransaction($amount, $txnId);
 
         $response = $everypay->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
     }
 
-    public function testRefundMethod()
+    /**
+     * @depends testPurchaseMethod
+     */
+    public function testRefundMethod($txnId)
     {
         $everypay = $this->createGateway();
 
-        $amount = 1000;
-        $txnId = 'pmt_zxWtEfA57saKzIDx5F3bPuo1';
+        $amount = self::AMOUNT;
         $txn = new RefundTransaction($amount, $txnId);
 
         $response = $everypay->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
     }
 
     public function testVoidMethod()
     {
         $everypay = $this->createGateway();
 
-        $txnId = 'pmt_yEZF0nqJEKmsEy07yTdXfhBN';
-        $txn = new VoidTransaction($txnId);
+        $amount = self::AMOUNT;
+        $txn = new AuthorizeTransaction($amount, $this->getCard());
+        $response = $everypay->execute($txn);
+        $this->assertSuccess($response);
+
+        $txn = new VoidTransaction($response->getTransactionId());
 
         $response = $everypay->execute($txn);
 
-        print_r($response);
+        $this->assertSuccess($response);
     }
 
     private function getCard()

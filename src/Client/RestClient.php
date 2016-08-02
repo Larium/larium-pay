@@ -63,7 +63,7 @@ class RestClient implements Client
         return $conn->execute();
     }
 
-    public function put($id, $payload)
+    public function put($id, $payload = null)
     {
         $conn = new Curl(
             $this->getUri($id),
