@@ -76,7 +76,7 @@ class Stripe extends RestGateway
 
     protected function authenticate(Client $client)
     {
-        $client->setBasicAuthentication($this->options['sk'], null);
+        $client->setBasicAuthentication($this->options['secret_key'], null);
     }
 
     protected function success(array $responseBody)

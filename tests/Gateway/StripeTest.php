@@ -88,7 +88,7 @@ class StripeTest extends TestCase
     private function createGateway()
     {
         $credentials = $this->getFixture('stripe');
-        $options = ['sk' => $credentials['sk']];
+        $options = ['secret_key' => $credentials['secret_key']];
 
         return new Stripe($options);
     }

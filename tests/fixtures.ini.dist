@@ -1,7 +1,7 @@
 [everypay]
 secret_key = ''
 [stripe]
-sk = ''
+secret_key = ''
 [worldpay]
 service_key = ''
 client_key = ''
