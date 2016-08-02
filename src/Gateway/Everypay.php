@@ -14,6 +14,7 @@ use Larium\Pay\Transaction\Authorize;
 class Everypay extends RestGateway
 {
     const URI = 'https://api.everypay.gr';
+    const SANDBOX_URI = 'https://sandbox-api.everypay.gr';
 
     const SALE = 'payments';
     const CREDIT = 'payments/refund/%s';
@@ -23,7 +24,7 @@ class Everypay extends RestGateway
 
     protected function getBaseUri()
     {
-        return self::URI;
+        return $this->sandbox ? self::SANDBOX_URI : self::URI;
     }
 
     protected function purchase(Purchase $transaction)

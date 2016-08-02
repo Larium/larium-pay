@@ -16,14 +16,17 @@ use Larium\Pay\Exception\NotImplementedException;
 
 abstract class Gateway
 {
+    protected $sandbox;
+
     protected $options;
 
     private $responseCallback;
 
     final public function __construct(array $options = [])
     {
-        $this->options = $options;
+        $this->options = new ParamsBag($options);
 
+        $this->sandbox = $this->options->get('sandbox', false);
     }
 
     public function execute(

@@ -104,7 +104,10 @@ class EverypayTest extends TestCase
     private function createGateway()
     {
         $credentials = $this->getFixture('everypay');
-        $options = ['secret_key' => $credentials['secret_key']];
+        $options = [
+            'secret_key' => $credentials['secret_key'],
+            'sandbox' => true,
+        ];
 
         return new Everypay($options);
     }
