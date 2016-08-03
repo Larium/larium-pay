@@ -8,12 +8,14 @@ use Larium\Pay\Card;
 
 class SaleTransactionTest extends \PHPUnit_Framework_TestCase
 {
+    const AMOUNT = 1000;
+
     /**
      * @expectedException RuntimeException
      */
     public function testCommitTransaction()
     {
-        $amount = 1000;
+        $amount = self::AMOUNT;
         $card = $this->getCard();
 
         $txn = new PurchaseTransaction($amount, $card);
@@ -26,7 +28,7 @@ class SaleTransactionTest extends \PHPUnit_Framework_TestCase
 
     public function testTransactionExtraOptions()
     {
-        $amount = 1000;
+        $amount = self::AMOUNT;
         $card = $this->getCard();
         $extra = [
             'first_option' => 'first_value',
