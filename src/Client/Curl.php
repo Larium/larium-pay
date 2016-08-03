@@ -176,9 +176,9 @@ class Curl
         array_walk($parts, function (&$part) {
             $part = trim($part);
         });
-        $headers = array_filter($parts, function ($v, $k) {
+        $headers = array_filter($parts, function ($v) {
             return strlen($v) && false !== strpos($v, ':');
-        }, ARRAY_FILTER_USE_BOTH);
+        });
 
         return $headers;
     }
