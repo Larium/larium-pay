@@ -34,7 +34,7 @@ class WorldpayTest extends TestCase
     {
         $worldpay = $this->createGateway();
 
-        $amount = SELF::AMOUNT;
+        $amount = self::AMOUNT;
         $txn = new AuthorizeTransaction($amount, $this->getCard());
         $txn->setDescription('Test Worldpay order.');
 
@@ -52,7 +52,7 @@ class WorldpayTest extends TestCase
     {
         $worldpay = $this->createGateway();
 
-        $txn = new CaptureTransaction(SELF::AMOUNT, $txnId);
+        $txn = new CaptureTransaction(self::AMOUNT, $txnId);
         $response = $worldpay->execute($txn);
 
         $this->assertSuccess($response);
@@ -65,7 +65,7 @@ class WorldpayTest extends TestCase
     {
         $worldpay = $this->createGateway();
 
-        $txn = new RefundTransaction(SELF::AMOUNT, $txnId);
+        $txn = new RefundTransaction(self::AMOUNT, $txnId);
         $response = $worldpay->execute($txn);
 
         $this->assertSuccess($response);
