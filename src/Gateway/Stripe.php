@@ -18,6 +18,8 @@ class Stripe extends RestGateway
     const CAPTURE = 'charges/%s/capture';
     const PURCHASE = 'charges';
 
+    const CURRENCY = 'GBP';
+
     private $payload;
 
     protected function getBaseUri()
@@ -116,7 +118,7 @@ class Stripe extends RestGateway
 
         $this->payload = [
             'amount' => $transaction->getAmount(),
-            'currency' => strtolower($transaction->getCurrency()),
+            'currency' => strtolower($transaction->getCurrency() ?: self::CURRENCY),
         ];
 
         $this->setPaySource($card);

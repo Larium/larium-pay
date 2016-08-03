@@ -20,6 +20,8 @@ class Everypay extends RestGateway
     const CREDIT = 'payments/refund/%s';
     const CAPTURE = 'payments/capture/%s';
 
+    const CURRENCY = 'EUR';
+
     private $payload = [];
 
     protected function getBaseUri()

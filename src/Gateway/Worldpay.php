@@ -20,6 +20,8 @@ class Worldpay extends RestGateway
     const REFUND = 'orders/%s/refund';
     const CAPTURE = 'orders/%s/capture';
 
+    const CURRENCY = 'GBP';
+
     private $payload = [];
 
     protected function getBaseUri()
@@ -102,9 +104,9 @@ class Worldpay extends RestGateway
         $this->payload = [
             'token' => $token,
             'amount' => $transaction->getAmount(),
-            'currencyCode' => $transaction->getCurrency(),
+            'currencyCode' => $transaction->getCurrency() ?: self::CURRENCY,
             'orderDescription' => $transaction->getDescription(),
-            'settlementCurrency' => $transaction->getCurrency(),
+            'settlementCurrency' => $transaction->getCurrency() ?: self::CURRENCY,
         ];
 
         $this->payload = array_filter($this->payload);
