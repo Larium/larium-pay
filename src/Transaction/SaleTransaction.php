@@ -20,7 +20,7 @@ abstract class SaleTransaction implements Sale
     /**
      * @var string
      */
-    private $currency = 'EUR';
+    private $currency = '';
 
     /**
      * @var CardReference
@@ -168,7 +168,7 @@ abstract class SaleTransaction implements Sale
     public function setCurrency($currency)
     {
         $this->allowChanges();
-        $this->currency = $curreny;
+        $this->currency = $currency;
     }
 
     public function getCurrency()
