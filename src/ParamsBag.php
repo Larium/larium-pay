@@ -13,7 +13,6 @@ class ParamsBag implements Iterator, ArrayAccess
      * The array of option values.
      *
      * @var array
-     * @access private
      */
     private $params = array();
 
@@ -47,7 +46,6 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * Returns an array from params.
      *
-     * @access public
      * @return array
      */
     public function getArrayCopy()
@@ -55,35 +53,49 @@ class ParamsBag implements Iterator, ArrayAccess
         return $this->params;
     }
 
-    /* -(  Iterator  )------------------------------------------------------ */
-
+    /**
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         reset($this->params);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function current()
     {
         return current($this->params);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function key()
     {
         return key($this->params);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function next()
     {
         next($this->params);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function valid()
     {
         return current($this->params) !== false;
     }
 
-    /* -(  ArrayAccess  )--------------------------------------------------- */
-
+    /**
+     * {@inheritdoc}
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -93,16 +105,25 @@ class ParamsBag implements Iterator, ArrayAccess
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->params);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function offsetUnset($offset)
     {
         unset($this->params[$offset]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function offsetGet($offset)
     {
         $value = isset($this->params[$offset])
