@@ -4,7 +4,6 @@
 
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Card;
 use Larium\Pay\TestCase;
 use Larium\Pay\Transaction\RefundTransaction;
 use Larium\Pay\Transaction\CaptureTransaction;
@@ -72,17 +71,6 @@ class StripeTest extends TestCase
         $response = $stripe->execute($txn);
 
         $this->assertSuccess($response);
-    }
-
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
     }
 
     private function createGateway()

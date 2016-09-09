@@ -4,7 +4,6 @@
 
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Card;
 use Larium\Pay\Gateway\TestGateway;
 use Larium\Pay\Transaction\VoidTransaction;
 use Larium\Pay\Transaction\RefundTransaction;
@@ -95,16 +94,5 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             1000,
             'txn-reference-12345'
         );
-    }
-
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
     }
 }

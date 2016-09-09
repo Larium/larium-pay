@@ -90,17 +90,6 @@ class EverypayTest extends TestCase
         $this->assertSuccess($response);
     }
 
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
-    }
-
     private function createGateway()
     {
         $credentials = $this->getFixture('everypay');

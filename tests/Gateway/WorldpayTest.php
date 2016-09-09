@@ -98,7 +98,7 @@ class WorldpayTest extends TestCase
         $this->assertFailure($response);
     }
 
-    private function getCard()
+    protected function getCard()
     {
         return new Card([
             'name' => 'JOHN DOE',

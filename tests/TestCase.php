@@ -4,6 +4,7 @@
 
 namespace Larium\Pay;
 
+use Larium\Pay\Card;
 use Larium\Pay\Response;
 
 class TestCase extends \PHPUnit_Framework_TestCase
@@ -25,5 +26,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function assertFailure(Response $response)
     {
         $this->assertFalse($response->isSuccess());
+    }
+
+    protected function getCard()
+    {
+        return new Card([
+            'name' => 'JOHN DOE',
+            'number' => '4111111111111111',
+            'month' => '01',
+            'year' => date('Y') + 1,
+            'cvv' => '123',
+        ]);
     }
 }
