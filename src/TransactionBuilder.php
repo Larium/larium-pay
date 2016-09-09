@@ -6,6 +6,11 @@ namespace Larium\Pay;
 
 use ReflectionClass;
 
+/**
+ * A fluent interface ({@link http://martinfowler.com/bliki/FluentInterface.html}) for creating transaction objects.
+ *
+ * @author Andreas Kollaros <andreas@larium.net>
+ */
 class TransactionBuilder
 {
     private $transaction;

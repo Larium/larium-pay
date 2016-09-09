@@ -33,7 +33,6 @@ abstract class Gateway
         Transaction $transaction,
         callable $responseCallback = null
     ) {
-        $this->responseCallback = $responseCallback;
         $transaction->commit();
 
         $this->responseCallback = $responseCallback;
