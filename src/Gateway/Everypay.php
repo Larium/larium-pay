@@ -17,7 +17,7 @@ class Everypay extends RestGateway
     const SANDBOX_URI = 'https://sandbox-api.everypay.gr';
 
     const SALE = 'payments';
-    const CREDIT = 'payments/refund/%s';
+    const REFUND = 'payments/refund/%s';
     const CAPTURE = 'payments/capture/%s';
 
     const CURRENCY = 'EUR';
@@ -63,7 +63,7 @@ class Everypay extends RestGateway
 
     protected function refund(Refund $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)
+        $response = $this->getRestClient(self::REFUND)
             ->put($transaction->getId());
 
         return $this->getResponse($response);
@@ -71,7 +71,7 @@ class Everypay extends RestGateway
 
     protected function void(Void $transaction)
     {
-        $response = $this->getRestClient(self::CREDIT)
+        $response = $this->getRestClient(self::REFUND)
             ->put($transaction->getId());
 
         return $this->getResponse($response);

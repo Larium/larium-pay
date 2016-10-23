@@ -4,6 +4,12 @@
 
 namespace Larium\Pay\Client;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Message\Authentication\BasicAuth;
+use Http\Discovery\MessageFactoryDiscovery;
+
 class RestClient implements Client
 {
     private $baseUri;
@@ -25,9 +31,9 @@ class RestClient implements Client
         array $options = []
     ) {
         $this->baseUri = rtrim($baseUri, '/') . '/';
-        $this->resource = $resource;
         $this->headers = $headers;
         $this->options = $options;
+        $this->resource = $resource;
     }
 
     public function addHeader($name, $value)
@@ -37,49 +43,50 @@ class RestClient implements Client
 
     public function get($id = null, $payload = null)
     {
-        $conn = new Curl(
-            $this->getUri($id),
-            Curl::METHOD_GET,
-            null,
-            $this->headers,
-            $this->options
+        $factory = $this->getMessageFactory();
+        $request = $factory->createRequest(
+            'GET',
+            $this->getUri(),
+            $this->headers
         );
-        $this->authenticate($conn);
 
-        return $conn->execute();
+        $request = $this->authenticate($request);
+
+        return $this->resolveResponse($this->sendRequest($request));
     }
 
     public function post($payload)
     {
-        $conn = new Curl(
+        $factory = $this->getMessageFactory();
+        $request = $factory->createRequest(
+            'POST',
             $this->getUri(),
-            Curl::METHOD_POST,
-            $payload,
             $this->headers,
-            $this->options
+            $this->normalizePayload($payload)
         );
-        $this->authenticate($conn);
 
-        return $conn->execute();
+        $request = $this->authenticate($request);
+
+        return $this->resolveResponse($this->sendRequest($request));
     }
 
     public function put($id, $payload = null)
     {
-        $conn = new Curl(
+        $factory = $this->getMessageFactory();
+        $request = $factory->createRequest(
+            'PUT',
             $this->getUri($id),
-            Curl::METHOD_PUT,
-            $payload,
             $this->headers,
-            $this->options
+            $this->normalizePayload($payload)
         );
-        $this->authenticate($conn);
 
-        return $conn->execute();
+        $request = $this->authenticate($request);
+
+        return $this->resolveResponse($this->sendRequest($request));
     }
 
     public function delete($id)
     {
-
     }
 
     public function getUri($id = null)
@@ -99,10 +106,45 @@ class RestClient implements Client
         $this->pass = $password;
     }
 
-    private function authenticate(Curl $conn)
+    private function authenticate(RequestInterface $request)
     {
         if ($this->username || $this->pass) {
-            $conn->setBasicAuthentication($this->username, $this->pass);
+            $authentication = new BasicAuth($this->username, $this->pass);
+
+            return $authentication->authenticate($request);
         }
+
+        return false;
+    }
+
+    private function normalizePayload($payload)
+    {
+        if (is_array($payload)) {
+            return http_build_query($payload);
+        }
+
+        return $payload;
+    }
+
+    private function getMessageFactory()
+    {
+        return  MessageFactoryDiscovery::find();
+    }
+
+    private function sendRequest(RequestInterface $request)
+    {
+        $request = $this->authenticate($request);
+        $client = HttpClientDiscovery::find();
+
+        return $client->sendRequest($request);
+    }
+
+    private function resolveResponse(ResponseInterface $response)
+    {
+        return array(
+            'status' => $response->getStatusCode(),
+            'headers' => $response->getHeaders(),
+            'body' => $response->getBody()->__toString(),
+        );
     }
 }

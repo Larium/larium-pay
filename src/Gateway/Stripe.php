@@ -172,4 +172,3 @@ class Stripe extends RestGateway
         $this->payload = array_merge($this->payload, $shipping);
     }
 }
-

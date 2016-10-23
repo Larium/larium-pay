@@ -9,7 +9,7 @@ class GatewayException extends \Exception
     public static function notImplemented($method)
     {
         return new Exception\NotImplementedException(
-            sprintf("Method `%s` is not implemented!", $method)
+            sprintf("Method `%s` is not supported!", $method)
         );
     }
 
