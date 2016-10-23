@@ -4,8 +4,6 @@
 
 namespace Larium\Pay;
 
-use InvalidArgumentException;
-
 class GatewayFactory
 {
     const GATEWAY_NAMESPACE = 'Larium\\Pay\\Gateway\\';
@@ -49,8 +47,6 @@ class GatewayFactory
             return new $gateway($options);
         }
 
-        throw new InvalidArgumentException(
-            sprintf('Could not resolve gateway with name `%s`', $name)
-        );
+        throw GatewayException::invalidGatewayName($name);
     }
 }

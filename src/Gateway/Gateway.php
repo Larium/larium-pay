@@ -6,6 +6,7 @@ namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Response;
 use Larium\Pay\ParamsBag;
+use Larium\Pay\GatewayException;
 use Larium\Pay\Transaction\Void;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
@@ -57,39 +58,45 @@ abstract class Gateway
 
     protected function purchase(Purchase $transaction)
     {
-        throw new NotImplementedException(
-            sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
-        );
+        throw GatewayException::notImplemented(__FUNCTION__);
     }
 
     protected function authorize(Authorize $transaction)
     {
-        throw new NotImplementedException(
-            sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
-        );
+        throw GatewayException::notImplemented(__FUNCTION__);
     }
 
     protected function capture(Capture $transaction)
     {
-        throw new NotImplementedException(
-            sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
-        );
+        throw GatewayException::notImplemented(__FUNCTION__);
     }
 
     protected function refund(Refund $transaction)
     {
-        throw new NotImplementedException(
-            sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
-        );
+        throw GatewayException::notImplemented(__FUNCTION__);
     }
 
     protected function void(Void $transaction)
     {
-        throw new NotImplementedException(
-            sprintf('Transaction `%s` in not implemented by `%s`', __FUNCTION__, get_class($this))
-        );
+        throw GatewayException::notImplemented(__FUNCTION__);
     }
 
+    /**
+     * Creates and return the response from gateway.
+     *
+     * @param bool   $success       Whether response was success or not.
+     * @param string $message       The message theat describe response status or
+     *                              reason.
+     * @param string $transactionId The unique identifier from transaction.
+     * @param string $errorCode     The error code if transaction was failed.
+     * @param string $responsecCode The ISO 8583 response code. Not always
+     *                              available.
+     * @param array  $payload       An associative array of raw response from
+     *                              gateway.
+     *
+     * @return Larium\Pay\Response|mixed Response may be a user response if $responseCallback
+     *                                   param is used in execute method
+     */
     protected function createResponse(
         $success,
         $message,

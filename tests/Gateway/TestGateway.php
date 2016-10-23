@@ -12,16 +12,13 @@ class TestGateway extends Gateway
 {
     public function purchase(Purchase $transaction)
     {
-
     }
 
     public function authorize(Authorize $transaction)
     {
-
     }
 
     public function capture(Capture $transaction)
     {
-
     }
 }

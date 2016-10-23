@@ -14,26 +14,21 @@ class Bogus extends Gateway
 {
     protected function purchase(Purchase $transaction)
     {
-
     }
 
     protected function authorize(Authorize $transaction)
     {
-
     }
 
     protected function capture(Capture $transaction)
     {
-
     }
 
     protected function refund(Refund $transaction)
     {
-
     }
 
     protected function void(Void $transaction)
     {
-
     }
 }

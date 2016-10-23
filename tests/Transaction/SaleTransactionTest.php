@@ -41,7 +41,6 @@ class SaleTransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Larium\Pay\ParamsBag', $extraOptions);
         $this->assertEquals('first_value', $extraOptions->first_option);
-
     }
 
     private function getCard()

@@ -4,6 +4,7 @@
 
 namespace Larium\Pay\Gateway;
 
+use Larium\Pay\TestCase;
 use Larium\Pay\Gateway\TestGateway;
 use Larium\Pay\Transaction\VoidTransaction;
 use Larium\Pay\Transaction\RefundTransaction;
@@ -11,7 +12,7 @@ use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
 use Larium\Pay\Transaction\AuthorizeTransaction;
 
-class GatewayTest extends \PHPUnit_Framework_TestCase
+class GatewayTest extends TestCase
 {
     /**
      * @dataProvider getExecuteMethods

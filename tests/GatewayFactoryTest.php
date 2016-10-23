@@ -17,7 +17,7 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Larium\Pay\Exception\InvalidGatewayNameException
      * @expectedExceptionMessage Could not resolve gateway with name `UnknownGateway`
      */
     public function testFailedGatewayCreation()
