@@ -20,6 +20,8 @@ class RestClient implements Client
 
     private $pass;
 
+    private $headerAuthentication = [];
+
     private $headers = [];
 
     private $options = [];
@@ -106,6 +108,11 @@ class RestClient implements Client
         $this->pass = $password;
     }
 
+    public function setHeaderAuthentication($name, $value)
+    {
+        $this->headerAuthentication = ['name' => $name, 'value' => $value];
+    }
+
     private function authenticate(RequestInterface $request)
     {
         if ($this->username || $this->pass) {
@@ -114,7 +121,16 @@ class RestClient implements Client
             return $authentication->authenticate($request);
         }
 
-        return false;
+        if (!empty($this->headerAuthentication)) {
+            $request = $request->withHeader(
+                $this->headerAuthentication['name'],
+                $this->headerAuthentication['value']
+            );
+
+            return $request;
+        }
+
+        return $request;
     }
 
     private function normalizePayload($payload)

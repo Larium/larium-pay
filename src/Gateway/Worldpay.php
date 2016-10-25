@@ -138,13 +138,13 @@ class Worldpay extends RestGateway
 
     protected function authenticate(Client $client)
     {
-        $client->addHeader('Authorization', $this->options['service_key']);
+        $client->setHeaderAuthentication('Authorization', $this->options['service_key']);
     }
 
     protected function createRestClient($uri, $resource)
     {
         $headers = [
-            'Content-type: application/json',
+            'Content-type' => 'application/json',
         ];
 
         return new RestClient($uri, $resource, $headers);
