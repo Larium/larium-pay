@@ -8,6 +8,7 @@ use Larium\Pay\TestCase;
 use Larium\Pay\Transaction\RefundTransaction;
 use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
+use Larium\Pay\Transaction\RetrieveTransaction;
 use Larium\Pay\Transaction\AuthorizeTransaction;
 
 class StripeTest extends TestCase
@@ -68,6 +69,19 @@ class StripeTest extends TestCase
         $stripe = $this->createGateway();
 
         $txn = new RefundTransaction(self::AMOUNT, $txnId);
+        $response = $stripe->execute($txn);
+
+        $this->assertSuccess($response);
+    }
+
+    /**
+     * @depends testPurchaseMethod
+     */
+    public function testRetrieveMethod($txnId)
+    {
+        $stripe = $this->createGateway();
+
+        $txn = new RetrieveTransaction($txnId);
         $response = $stripe->execute($txn);
 
         $this->assertSuccess($response);

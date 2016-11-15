@@ -8,6 +8,7 @@ use Larium\Pay\Client\Client;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Purchase;
+use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
 
 class Stripe extends RestGateway
@@ -17,6 +18,7 @@ class Stripe extends RestGateway
     const REFUND = 'refunds';
     const CAPTURE = 'charges/%s/capture';
     const PURCHASE = 'charges';
+    const RETRIEVE = 'charges/%s';
 
     const CURRENCY = 'GBP';
 
@@ -72,6 +74,16 @@ class Stripe extends RestGateway
         $response = $this->getRestClient(self::REFUND)
             ->post($payload);
 
+
+        return $this->getResponse($response);
+    }
+
+    protected function retrieve(Retrieve $transaction)
+    {
+        $resource = sprintf(self::RETRIEVE, $transaction->getId());
+
+        $response = $this->getRestClient($resource)
+            ->get();
 
         return $this->getResponse($response);
     }
