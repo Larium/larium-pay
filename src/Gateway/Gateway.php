@@ -92,7 +92,7 @@ abstract class Gateway
         throw GatewayException::notImplemented(__FUNCTION__);
     }
 
-    protected function initiate(Transaction\Initial $transaction)
+    protected function initiate(Initial $transaction)
     {
         throw GatewayException::notImplemented(__FUNCTION__);
     }
