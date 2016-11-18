@@ -10,6 +10,7 @@ use Larium\Pay\GatewayException;
 use Larium\Pay\Transaction\Void;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
+use Larium\Pay\Transaction\Initial;
 use Larium\Pay\Transaction\Purchase;
 use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
@@ -52,6 +53,8 @@ abstract class Gateway
                 return $this->void($transaction);
             case $transaction instanceof Retrieve:
                 return $this->retrieve($transaction);
+            case $transaction instanceof Initial:
+                return $this->initiate($transaction);
             default:
                 throw new \RuntimeException(
                     sprintf('Invalid transaction type `%s`', get_class($transaction))
@@ -85,6 +88,11 @@ abstract class Gateway
     }
 
     protected function retrieve(Retrieve $transaction)
+    {
+        throw GatewayException::notImplemented(__FUNCTION__);
+    }
+
+    protected function initiate(Transaction\Initial $transaction)
     {
         throw GatewayException::notImplemented(__FUNCTION__);
     }
