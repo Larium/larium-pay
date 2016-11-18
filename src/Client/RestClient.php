@@ -147,15 +147,19 @@ class RestClient implements Client
         return  MessageFactoryDiscovery::find();
     }
 
+    protected function discoverClient()
+    {
+        return HttpClientDiscovery::find();
+    }
+
     private function sendRequest(RequestInterface $request)
     {
         $request = $this->authenticate($request);
-        $client = HttpClientDiscovery::find();
 
-        return $client->sendRequest($request);
+        return $this->discoverClient()->sendRequest($request);
     }
 
-    private function resolveResponse(ResponseInterface $response)
+    protected function resolveResponse(ResponseInterface $response)
     {
         return array(
             'status' => $response->getStatusCode(),

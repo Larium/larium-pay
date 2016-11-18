@@ -28,6 +28,34 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isSuccess());
     }
 
+    protected function mockGatewayClient($gatewayClassName, $options, $response)
+    {
+        $clientStub = $this->getMockBuilder('Larium\Pay\Client\RestClient')
+            ->disableOriginalConstructor()
+            ->setMethods(['resolveResponse', 'discoverClient'])
+            ->getMock();
+
+        $clientStub->method('resolveResponse')
+            ->will($this->returnValue([
+                'status' => 200,
+                'headers' => '',
+                'body' => $response
+            ]));
+
+        $clientStub->method('discoverClient')
+            ->willReturn(new \Http\Mock\Client());
+
+        $gatewayStub = $this->getMockBuilder($gatewayClassName)
+            ->setConstructorArgs([$options])
+            ->setMethods(['createRestClient'])
+            ->getMock();
+
+        $gatewayStub->method('createRestClient')
+            ->will($this->returnValue($clientStub));
+
+        return $gatewayStub;
+    }
+
     protected function getCard()
     {
         return new Card([
