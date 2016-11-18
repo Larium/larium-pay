@@ -1,7 +1,2 @@
-[everypay]
+[bogus]
 secret_key = ''
-[stripe]
-secret_key = ''
-[worldpay]
-service_key = ''
-client_key = ''
