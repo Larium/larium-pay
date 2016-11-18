@@ -28,7 +28,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isSuccess());
     }
 
-    protected function mockGatewayClient($gatewayClassName, $options, $response)
+    protected function mockGatewayClient($gatewayClassName, $options, array $response)
     {
         $clientStub = $this->getMockBuilder('Larium\Pay\Client\RestClient')
             ->disableOriginalConstructor()
@@ -36,11 +36,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $clientStub->method('resolveResponse')
-            ->will($this->returnValue([
-                'status' => 200,
-                'headers' => '',
-                'body' => $response
-            ]));
+            ->will($this->returnValue($response));
 
         $clientStub->method('discoverClient')
             ->willReturn(new \Http\Mock\Client());
