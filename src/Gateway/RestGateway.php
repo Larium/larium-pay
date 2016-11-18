@@ -31,55 +31,58 @@ abstract class RestGateway extends Gateway
     /**
      * Return whether the response is success or not.
      *
-     * $responseBody param contains all the elements of gateway response,
-     * parsed as associative array.
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
      *
-     * @param array $responseBody
+     * @param array $response
      * @return bool
      */
-    abstract protected function success(array $responseBody);
+    abstract protected function success(array $response);
 
     /**
      * Returns the message from gateway response.
      *
-     * @param array $responseBody
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
      * @return string
      */
-    abstract protected function message(array $responseBody);
+    abstract protected function message(array $response);
 
     /**
      * Returns th unique transaction id from gateway response.
      *
-     * $responseBody param contains all the elements of gateway response,
-     * parsed as associative array.
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
      *
-     * @param array $responseBody
+     * @param array $response
      * @return string
      */
-    abstract protected function transactionId(array $responseBody);
+    abstract protected function transactionId(array $response);
 
     /**
      * Returns error code from gateway if exists.
      *
-     * $responseBody param contains all the elements of gateway response,
-     * parsed as associative array.
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
      *
-     * @param array $responseBody
+     * @param array $response
      * @return string|null
      */
-    abstract protected function errorCode(array $responseBody);
+    abstract protected function errorCode(array $response);
 
     /**
      * Returns response code from card processing, if exists.
      * @link https://arch.developer.visa.com/vpp/documents/xml/Request_and_Response.html Example of response codes
      *
-     * $responseBody param contains all the elements of gateway response,
-     * parsed as associative array.
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
      *
-     * @param array $responseBody
+     * @param array $response
      * @return string|null
      */
-    abstract protected function responseCode(array $responseBody);
+    abstract protected function responseCode(array $response);
 
     /**
      * Returns the RestClient for given resource name.
@@ -119,15 +122,13 @@ abstract class RestGateway extends Gateway
      */
     protected function getResponse(array $response)
     {
-        $responseBody = json_decode($response['body'], true) ?: [];
-
         return $this->createResponse(
-            $this->success($responseBody),
-            $this->message($responseBody),
-            $this->transactionId($responseBody),
-            $this->errorCode($responseBody),
-            $this->responseCode($responseBody),
-            $responseBody
+            $this->success($response),
+            $this->message($response),
+            $this->transactionId($response),
+            $this->errorCode($response),
+            $this->responseCode($response),
+            $response['body']
         );
     }
 }

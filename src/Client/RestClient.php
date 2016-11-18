@@ -161,10 +161,13 @@ class RestClient implements Client
 
     protected function resolveResponse(ResponseInterface $response)
     {
+        $body = $response->getBody()->__toString();
+        $responseBody = json_decode($body, true) ?: [];
+
         return array(
             'status' => $response->getStatusCode(),
             'headers' => $response->getHeaders(),
-            'body' => $response->getBody()->__toString(),
+            'body' => $responseBody,
         );
     }
 }

@@ -93,33 +93,33 @@ class Stripe extends RestGateway
         $client->setBasicAuthentication($this->options['secret_key'], null);
     }
 
-    protected function success(array $responseBody)
+    protected function success(array $response)
     {
-        return !isset($responseBody['error']);
+        return !isset($response['body']['error']);
     }
 
-    protected function message(array $responseBody)
+    protected function message(array $response)
     {
-        return $this->success($responseBody)
-            ? $responseBody['status']
-            : $responseBody['error']['message'];
+        return $this->success($response)
+            ? $response['body']['status']
+            : $response['body']['error']['message'];
     }
 
-    protected function transactionId(array $responseBody)
+    protected function transactionId(array $response)
     {
-        return $this->success($responseBody)
-            ? $responseBody['id']
+        return $this->success($response)
+            ? $response['body']['id']
             : null;
     }
 
-    protected function errorCode(array $responseBody)
+    protected function errorCode(array $response)
     {
-        return $this->success($responseBody)
+        return $this->success($response)
             ? 0
-            : $responseBody['error']['type'];
+            : $response['body']['error']['type'];
     }
 
-    protected function responseCode(array $responseBody)
+    protected function responseCode(array $response)
     {
         return null;
     }

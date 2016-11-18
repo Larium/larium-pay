@@ -150,60 +150,60 @@ class Worldpay extends RestGateway
         return new RestClient($uri, $resource, $headers);
     }
 
-    protected function success(array $responseBody)
+    protected function success(array $response)
     {
-        if (isset($responseBody['paymentStatusReason'])
-            || isset($responseBody['iso8583Status'])
+        if (isset($response['body']['paymentStatusReason'])
+            || isset($response['body']['iso8583Status'])
         ) {
             return false;
         }
 
-        $statusCode = isset($responseBody['httpStatusCode'])
-            ? $responseBody['httpStatusCode']
+        $statusCode = isset($response['body']['httpStatusCode'])
+            ? $response['body']['httpStatusCode']
             : 200;
 
         return $statusCode == 200;
     }
 
-    protected function message(array $responseBody)
+    protected function message(array $response)
     {
-        if (isset($responseBody['paymentStatus'])) {
-            return $responseBody['paymentStatus'];
+        if (isset($response['body']['paymentStatus'])) {
+            return $response['body']['paymentStatus'];
         }
 
-        if (isset($responseBody['message'])) {
-            return $responseBody['message'];
+        if (isset($response['body']['message'])) {
+            return $response['body']['message'];
         }
 
         return null;
     }
 
-    protected function transactionId(array $responseBody)
+    protected function transactionId(array $response)
     {
-        if (!$this->success($responseBody)) {
+        if (!$this->success($response)) {
             return null;
         }
 
-        if (isset($responseBody['orderCode'])) {
-            return $responseBody['orderCode'];
+        if (isset($response['body']['orderCode'])) {
+            return $response['body']['orderCode'];
         }
 
-        if (isset($responseBody['token'])) {
-            return $responseBody['token'];
+        if (isset($response['body']['token'])) {
+            return $response['body']['token'];
         }
     }
 
-    protected function errorCode(array $responseBody)
+    protected function errorCode(array $response)
     {
-        return isset($responseBody['customCode'])
-            ? $responseBody['customCode']
+        return isset($response['body']['customCode'])
+            ? $response['body']['customCode']
             : null;
     }
 
-    protected function responseCode(array $responseBody)
+    protected function responseCode(array $response)
     {
-        if (isset($responseBody['iso8583Status'])
-            && preg_match("/(\d+)\s-/", $responseBody['iso8583Status'], $m)
+        if (isset($response['body']['iso8583Status'])
+            && preg_match("/(\d+)\s-/", $response['body']['iso8583Status'], $m)
         ) {
             return str_pad($m[1], 2, '0', STR_PAD_LEFT);
         }
