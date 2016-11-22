@@ -7,9 +7,9 @@ use Larium\Pay\CardReference;
 interface Sale extends Transaction
 {
     /**
-     * @return CardReference
+     * @return Larium\CreditCard\CreditCard
      */
-    public function getCardReference();
+    public function getCard();
 
     /**
      * @return int

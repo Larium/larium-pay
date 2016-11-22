@@ -2,14 +2,16 @@
 
 namespace Larium\Pay;
 
+use Larium\CreditCard\CreditCard;
+
 class TransactionFactory
 {
-    public static function purchase($amount, CardReference $card, array $extraOptions = [])
+    public static function purchase($amount, CreditCard $card, array $extraOptions = [])
     {
         return new Transaction\PurchaseTransaction($amount, $card, $extraOptions);
     }
 
-    public static function authorize($amount, CardReference $card, array $extraOptions = [])
+    public static function authorize($amount, CreditCard $card, array $extraOptions = [])
     {
         return new Transaction\AuthorizeTransaction($amount, $card, $extraOptions);
     }

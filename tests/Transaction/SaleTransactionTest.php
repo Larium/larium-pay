@@ -2,9 +2,9 @@
 
 namespace Larium\Pay\Transaction;
 
-use Larium\Pay\Card;
+use Larium\Pay\TestCase;
 
-class SaleTransactionTest extends \PHPUnit_Framework_TestCase
+class SaleTransactionTest extends TestCase
 {
     const AMOUNT = 1000;
 
@@ -39,16 +39,5 @@ class SaleTransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Larium\Pay\ParamsBag', $extraOptions);
         $this->assertEquals('first_value', $extraOptions->first_option);
-    }
-
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
     }
 }

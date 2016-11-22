@@ -3,6 +3,7 @@
 namespace Larium\Pay;
 
 use ReflectionClass;
+use Larium\CreditCard\CreditCard;
 
 /**
  * A fluent interface ({@link http://martinfowler.com/bliki/FluentInterface.html}) for creating transaction objects.
@@ -88,7 +89,7 @@ class TransactionBuilder
         return $instance;
     }
 
-    public function charge(CardReference $card)
+    public function charge(CreditCard $card)
     {
         $this->constructArgs[] = $card;
 

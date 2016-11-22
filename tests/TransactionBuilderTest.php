@@ -2,7 +2,7 @@
 
 namespace Larium\Pay;
 
-class TransactionBuilderTest extends \PHPUnit_Framework_TestCase
+class TransactionBuilderTest extends TestCase
 {
     const AMOUNT = 1000;
 
@@ -35,18 +35,7 @@ class TransactionBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($txn->getClientIp());
         $this->assertNotNull($txn->getCustomerEmail());
         $this->assertNotNull($txn->getAmount());
-        $this->assertNotNull($txn->getCardReference());
+        $this->assertNotNull($txn->getCard());
         $this->assertNotNull($txn->getCurrency());
-    }
-
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
     }
 }

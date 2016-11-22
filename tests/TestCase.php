@@ -2,8 +2,8 @@
 
 namespace Larium\Pay;
 
-use Larium\Pay\Card;
 use Larium\Pay\Response;
+use Larium\CreditCard\CreditCard;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +52,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function getCard()
     {
-        return new Card([
+        return new CreditCard([
             'name' => 'JOHN DOE',
             'number' => '4111111111111111',
             'month' => '01',

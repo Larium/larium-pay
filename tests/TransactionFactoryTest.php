@@ -2,7 +2,7 @@
 
 namespace Larium\Pay;
 
-class TransactionFactoryTest extends \PHPUnit_Framework_TestCase
+class TransactionFactoryTest extends TestCase
 {
     const AMOUNT = 2000;
 
@@ -64,16 +64,5 @@ class TransactionFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue($txn->canCommit());
-    }
-
-    private function getCard()
-    {
-        return new Card([
-            'name' => 'JOHN DOE',
-            'number' => '4111111111111111',
-            'month' => '01',
-            'year' => date('Y') + 1,
-            'cvv' => '123',
-        ]);
     }
 }

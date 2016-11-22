@@ -3,8 +3,8 @@
 namespace Larium\Pay\Transaction;
 
 use Larium\Pay\ParamsBag;
-use Larium\Pay\CardReference;
 use Larium\Pay\Transaction\Sale;
+use Larium\CreditCard\CreditCard;
 
 abstract class SaleTransaction implements Sale
 {
@@ -21,7 +21,7 @@ abstract class SaleTransaction implements Sale
     private $currency = '';
 
     /**
-     * @var CardReference
+     * @var Larium\CreditCard\CreditCard
      */
     private $card;
 
@@ -57,7 +57,7 @@ abstract class SaleTransaction implements Sale
 
     public function __construct(
         $amount,
-        CardReference $card,
+        CreditCard $card,
         array $extraOptions = []
     ) {
         $this->amount = $amount;
@@ -67,9 +67,9 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return CardReference
+     * @return Larium\CredeitCard\CreditCard
      */
-    public function getCardReference()
+    public function getCard()
     {
         return $this->card;
     }
@@ -154,7 +154,7 @@ abstract class SaleTransaction implements Sale
 
     public function canCommit()
     {
-        return $this->card instanceof CardReference
+        return $this->card instanceof CreditCard
             && $this->amount > 0;
     }
 
