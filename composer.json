@@ -28,7 +28,10 @@
     },
     "suggest" : {
         "php-http/curl-client": "Provides http client implementation",
-        "php-http/socket-client": "Provides http client implementation"
+        "php-http/socket-client": "Provides http client implementation",
+        "php-http/message": "Provides HTTP Message related tools",
+        "zendframework/zend-diactoros": "Provides PSR-7 Message Implementation",
+        "guzzlehttp/psr7": "Provides PSR-7 Message Implementation"
     },
     "minimum-stability": "stable",
     "autoload": {
