@@ -19,7 +19,7 @@ class GatewayTest extends TestCase
     {
         $transaction = $this->$transactionGetter();
 
-        $bogus = $this->getMockBuilder(Bogus::class)
+        $bogus = $this->getMockBuilder('Larium\Pay\Gateway\Bogus')
                          ->setMethods(array($method))
                          ->getMock();
 
@@ -44,7 +44,7 @@ class GatewayTest extends TestCase
     public function testQueryTransaction()
     {
         $g = $this->mockGatewayClient(
-            MyRestGateway::class,
+            'Larium\Pay\Gateway\MyRestGateway',
             [],
             [
                 'status' => 200,
