@@ -3,8 +3,8 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\TestCase;
-use Larium\Pay\Gateway\TestGateway;
 use Larium\Pay\Transaction\VoidTransaction;
+use Larium\Pay\Transaction\QueryTransaction;
 use Larium\Pay\Transaction\RefundTransaction;
 use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
@@ -19,7 +19,7 @@ class GatewayTest extends TestCase
     {
         $transaction = $this->$transactionGetter();
 
-        $bogus = $this->getMockBuilder('Larium\Pay\Gateway\Bogus')
+        $bogus = $this->getMockBuilder(Bogus::class)
                          ->setMethods(array($method))
                          ->getMock();
 
@@ -39,6 +39,26 @@ class GatewayTest extends TestCase
         $transaction = $this->getRefundTransaction();
 
         $bogus->execute($transaction);
+    }
+
+    public function testQueryTransaction()
+    {
+        $g = $this->mockGatewayClient(
+            MyRestGateway::class,
+            [],
+            [
+                'status' => 200,
+                'headers' => [],
+                'body' => [],
+            ]
+        );
+
+        $txn = new QueryTransaction([
+            'order' => 'created_at',
+            'limit' => 10,
+        ]);
+
+        $g->execute($txn);
     }
 
     public function getExecuteMethods()

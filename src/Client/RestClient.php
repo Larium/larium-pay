@@ -44,9 +44,13 @@ class RestClient implements Client
     public function get($id = null, $payload = null)
     {
         $factory = $this->getMessageFactory();
+        $uri = $this->getUri($id);
+        if ($query = $this->normalizePayload($payload)) {
+            $uri = $uri . '?' . ltrim($query, '?');
+        }
         $request = $factory->createRequest(
             'GET',
-            $this->getUri(),
+            $uri,
             $this->headers
         );
 

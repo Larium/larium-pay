@@ -3,6 +3,7 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Transaction\Void;
+use Larium\Pay\Transaction\Query;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Initial;
@@ -12,6 +13,7 @@ use Larium\Pay\Transaction\Authorize;
 
 class Bogus extends Gateway
 {
+
     protected function purchase(Purchase $transaction)
     {
     }
@@ -37,6 +39,10 @@ class Bogus extends Gateway
     }
 
     protected function initiate(Initial $transaction)
+    {
+    }
+
+    protected function query(Query $transaction)
     {
     }
 }
