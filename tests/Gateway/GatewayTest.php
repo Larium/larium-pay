@@ -50,6 +50,8 @@ class GatewayTest extends TestCase
                 'status' => 200,
                 'headers' => [],
                 'body' => [],
+                'raw_response' => null,
+                'raw_request' => null,
             ]
         );
 

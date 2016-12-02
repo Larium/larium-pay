@@ -35,12 +35,24 @@ class Response
     private $payload;
 
     /**
+     * @var string
+     */
+    private $rawRequest;
+
+    /**
+     * @var string
+     */
+    private $rawResponse;
+
+    /**
      * @param bool $success
      * @param string $message
      * @param string $transactionId
      * @param string $errorCode
      * @param string $responseCode
      * @param array $payload
+     * @param string $rawRequest
+     * @param string $rawResponse
      */
     public function __construct(
         $success,
@@ -48,7 +60,9 @@ class Response
         $transactionId,
         $errorCode = '0',
         $responseCode = '00',
-        array $payload = []
+        array $payload = [],
+        $rawResponse = null,
+        $rawRequest = null
     ) {
         $this->success = $success;
         $this->message = $message;
@@ -56,6 +70,8 @@ class Response
         $this->errorCode = $errorCode;
         $this->responseCode = $responseCode;
         $this->payload = $payload;
+        $this->rawRequest = $rawRequest;
+        $this->rawResponse = $rawResponse;
     }
 
     /**
@@ -118,5 +134,15 @@ class Response
     public function getPayload()
     {
         return $this->payload;
+    }
+
+    public function getRawRequest()
+    {
+        return $this->rawRequest;
+    }
+
+    public function getRawResponse()
+    {
+        return $this->rawResponse;
     }
 }

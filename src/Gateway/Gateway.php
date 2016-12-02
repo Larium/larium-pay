@@ -113,8 +113,10 @@ abstract class Gateway
      * @param string $errorCode     The error code if transaction was failed.
      * @param string $responsecCode The ISO 8583 response code. Not always
      *                              available.
-     * @param array  $payload       An associative array of raw response from
-     *                              gateway.
+     * @param array  $payload       An associative array of the response from
+     *                              gateway including http status and headers.
+     * @param string $rawResponse   The raw response of gateway.
+     * @param string $rawRequest    The raw request to gateway.
      *
      * @return Larium\Pay\Response|mixed Response may be a user response if $responseCallback
      *                                   param is used in execute method
@@ -125,7 +127,9 @@ abstract class Gateway
         $transactionId,
         $errorCode = '0',
         $responseCode = null,
-        array $payload = []
+        array $payload = [],
+        $rawResponse = null,
+        $rawRequest = null
     ) {
         $response = new Response(
             $success,
@@ -133,7 +137,9 @@ abstract class Gateway
             $transactionId,
             $errorCode,
             $responseCode,
-            $payload
+            $payload,
+            $rawResponse,
+            $rawRequest
         );
 
         if ($this->responseCallback) {

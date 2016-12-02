@@ -24,6 +24,8 @@ class RestClient implements Client
 
     private $options = [];
 
+    private $rawRequest;
+
     public function __construct(
         $baseUri,
         $resource,
@@ -158,9 +160,28 @@ class RestClient implements Client
     {
         $request = $this->authenticate($request);
 
-        return $this->discoverClient()->sendRequest($request);
+        $response = $this->discoverClient()->sendRequest($request);
+
+        if ($request->getBody()->isSeekable()) {
+            $request->getBody()->rewind();
+        }
+        $this->rawRequest = $request->getBody()->__toString();
+
+        return $response;
     }
 
+    /**
+     * Resolve the response from client.
+     *
+     * @param ResponseInterface $response
+     * @return array An array with following values:
+     *              'status': The Http status of response
+     *              'headers': An array of response headers
+     *              'body': The json decoded body response. (Since we are in
+     *              RestClient)
+     *              'raw_response': The raw body response for logging purposes.
+     *              'raw_request': The raw body request for logging purposes.
+     */
     protected function resolveResponse(ResponseInterface $response)
     {
         $body = $response->getBody()->__toString();
@@ -170,6 +191,8 @@ class RestClient implements Client
             'status' => $response->getStatusCode(),
             'headers' => $response->getHeaders(),
             'body' => $responseBody,
+            'raw_response' => $body,
+            'raw_request' => $this->rawRequest,
         );
     }
 }

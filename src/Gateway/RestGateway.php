@@ -115,7 +115,8 @@ abstract class RestGateway extends Gateway
     /**
      * Returns the final Response object
      *
-     * @param array $response  The raw response returned from client.
+     * @param array $response The response returned from RestClient @see
+     *                        RestClient::resolveResponse method
      * @return Larium\Pay\Response
      */
     protected function getResponse(array $response)
@@ -126,7 +127,9 @@ abstract class RestGateway extends Gateway
             $this->transactionId($response),
             $this->errorCode($response),
             $this->responseCode($response),
-            $response['body']
+            $response['body'],
+            $response['raw_response'],
+            $response['raw_request']
         );
     }
 }
