@@ -19,4 +19,24 @@ class TestGateway extends Gateway
     public function capture(Capture $transaction)
     {
     }
+
+    protected function success(array $response)
+    {
+    }
+
+    protected function message(array $response)
+    {
+    }
+
+    protected function transactionId(array $response)
+    {
+    }
+
+    protected function errorCode(array $response)
+    {
+    }
+
+    protected function responseCode(array $response)
+    {
+    }
 }

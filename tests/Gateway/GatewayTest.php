@@ -43,7 +43,7 @@ class GatewayTest extends TestCase
 
     public function testQueryTransaction()
     {
-        $g = $this->mockGatewayClient(
+        $g = $this->mockRestGatewayClient(
             'Larium\Pay\Gateway\MyRestGateway',
             [],
             [

@@ -27,62 +27,6 @@ abstract class RestGateway extends Gateway
     abstract protected function authenticate(Client $client);
 
     /**
-     * Return whether the response is success or not.
-     *
-     * $response param contains all the elements of gateway response,
-     * parsed as associative array, including http status and headers.
-     *
-     * @param array $response
-     * @return bool
-     */
-    abstract protected function success(array $response);
-
-    /**
-     * Returns the message from gateway response.
-     *
-     * $response param contains all the elements of gateway response,
-     * parsed as associative array, including http status and headers.
-     *
-     * @param array $response
-     * @return string
-     */
-    abstract protected function message(array $response);
-
-    /**
-     * Returns th unique transaction id from gateway response.
-     *
-     * $response param contains all the elements of gateway response,
-     * parsed as associative array, including http status and headers.
-     *
-     * @param array $response
-     * @return string
-     */
-    abstract protected function transactionId(array $response);
-
-    /**
-     * Returns error code from gateway if exists.
-     *
-     * $response param contains all the elements of gateway response,
-     * parsed as associative array, including http status and headers.
-     *
-     * @param array $response
-     * @return string|null
-     */
-    abstract protected function errorCode(array $response);
-
-    /**
-     * Returns response code from card processing, if exists.
-     * @link https://arch.developer.visa.com/vpp/documents/xml/Request_and_Response.html Example of response codes
-     *
-     * $response param contains all the elements of gateway response,
-     * parsed as associative array, including http status and headers.
-     *
-     * @param array $response
-     * @return string|null
-     */
-    abstract protected function responseCode(array $response);
-
-    /**
      * Returns the RestClient for given resource name.
      *
      * Resource name is usually the uri path for the resource to call.
@@ -94,7 +38,7 @@ abstract class RestGateway extends Gateway
      */
     protected function getRestClient($resource)
     {
-        $client = $this->createRestClient($this->getBaseUri(), $resource);
+        $client = $this->createClient($this->getBaseUri(), $resource);
         $this->authenticate($client);
 
         return $client;
@@ -107,7 +51,7 @@ abstract class RestGateway extends Gateway
      * @param string $resource The resource path to request.
      * @return Larium\Pay\Client\RestClient.
      */
-    protected function createRestClient($uri, $resource)
+    protected function createClient($uri, $resource)
     {
         return new RestClient($uri, $resource);
     }

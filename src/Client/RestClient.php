@@ -148,7 +148,7 @@ class RestClient implements Client
 
     private function getMessageFactory()
     {
-        return  MessageFactoryDiscovery::find();
+        return MessageFactoryDiscovery::find();
     }
 
     protected function discoverClient()

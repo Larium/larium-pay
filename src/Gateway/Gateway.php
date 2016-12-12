@@ -15,6 +15,7 @@ use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
 use Larium\Pay\Transaction\Transaction;
 use Larium\Pay\Exception\NotImplementedException;
+use Larium\Pay\Transaction\ThreedSecureAuthenticate;
 
 abstract class Gateway
 {
@@ -23,6 +24,62 @@ abstract class Gateway
     protected $options;
 
     private $responseCallback;
+
+    /**
+     * Return whether the response is success or not.
+     *
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
+     * @return bool
+     */
+    abstract protected function success(array $response);
+
+    /**
+     * Returns the message from gateway response.
+     *
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
+     * @return string
+     */
+    abstract protected function message(array $response);
+
+    /**
+     * Returns th unique transaction id from gateway response.
+     *
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
+     * @return string
+     */
+    abstract protected function transactionId(array $response);
+
+    /**
+     * Returns error code from gateway if exists.
+     *
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
+     * @return string|null
+     */
+    abstract protected function errorCode(array $response);
+
+    /**
+     * Returns response code from card processing, if exists.
+     * @link https://arch.developer.visa.com/vpp/documents/xml/Request_and_Response.html Example of response codes
+     *
+     * $response param contains all the elements of gateway response,
+     * parsed as associative array, including http status and headers.
+     *
+     * @param array $response
+     * @return string|null
+     */
+    abstract protected function responseCode(array $response);
 
     final public function __construct(array $options = [])
     {
@@ -56,6 +113,8 @@ abstract class Gateway
                 return $this->initiate($transaction);
             case $transaction instanceof Query:
                 return $this->query($transaction);
+            case $transaction instanceof ThreedSecureAuthenticate:
+                return $this->threedSecureAuthenticate($transaction);
             default:
                 throw new \RuntimeException(
                     sprintf('Invalid transaction type `%s`', get_class($transaction))
@@ -103,6 +162,11 @@ abstract class Gateway
         throw GatewayException::notImplemented(__FUNCTION__);
     }
 
+    protected function threedSecureAuthenticate(ThreedSecureAuthenticate $transaction)
+    {
+        throw GatewayException::notImplemented(__FUNCTION__);
+    }
+
     /**
      * Creates and return the response from gateway.
      *
@@ -127,7 +191,7 @@ abstract class Gateway
         $transactionId,
         $errorCode = '0',
         $responseCode = null,
-        array $payload = [],
+        $payload = null,
         $rawResponse = null,
         $rawRequest = null
     ) {

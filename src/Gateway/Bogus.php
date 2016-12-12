@@ -45,4 +45,24 @@ class Bogus extends Gateway
     protected function query(Query $transaction)
     {
     }
+
+    protected function success(array $response)
+    {
+    }
+
+    protected function message(array $response)
+    {
+    }
+
+    protected function transactionId(array $response)
+    {
+    }
+
+    protected function errorCode(array $response)
+    {
+    }
+
+    protected function responseCode(array $response)
+    {
+    }
 }

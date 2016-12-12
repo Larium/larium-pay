@@ -26,9 +26,29 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isSuccess());
     }
 
-    protected function mockGatewayClient($gatewayClassName, $options, array $response)
+    protected function mockRestGatewayClient($gatewayClassName, $options, array $response)
     {
-        $clientStub = $this->getMockBuilder('Larium\Pay\Client\RestClient')
+        return $this->mockGatewayClient(
+            'Larium\Pay\Client\RestClient',
+            $gatewayClassName,
+            $options,
+            $response
+        );
+    }
+
+    protected function mockXmlGatewayClient($gatewayClassName, $options, array $response)
+    {
+        return $this->mockGatewayClient(
+            'Larium\Pay\Client\XmlClient',
+            $gatewayClassName,
+            $options,
+            $response
+        );
+    }
+
+    protected function mockGatewayClient($clientClass, $gatewayClassName, $options, array $response)
+    {
+        $clientStub = $this->getMockBuilder($clientClass)
             ->disableOriginalConstructor()
             ->setMethods(['resolveResponse', 'discoverClient'])
             ->getMock();
@@ -41,10 +61,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         $gatewayStub = $this->getMockBuilder($gatewayClassName)
             ->setConstructorArgs([$options])
-            ->setMethods(['createRestClient'])
+            ->setMethods(['createClient'])
             ->getMock();
 
-        $gatewayStub->method('createRestClient')
+        $gatewayStub->method('createClient')
             ->will($this->returnValue($clientStub));
 
         return $gatewayStub;
@@ -59,5 +79,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'year' => date('Y') + 1,
             'cvv' => '123',
         ]);
+    }
+
+    protected function generateUniqueId()
+    {
+        return substr(uniqid(rand(), true), 0, 10);
     }
 }
