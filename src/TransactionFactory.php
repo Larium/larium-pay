@@ -63,12 +63,17 @@ class TransactionFactory
         );
     }
 
-    public static function transfer($amount, $currency, $recipientIdentifier)
-    {
+    public static function transfer(
+        $amount,
+        $currency,
+        $recipientIdentifier,
+        array $extraOptions = []
+    ) {
         return new Transaction\TransferTransaction(
             $amount,
             $currency,
-            $recipientIdentifier
+            $recipientIdentifier,
+            $extraOptions
         );
     }
 }

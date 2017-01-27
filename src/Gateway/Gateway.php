@@ -170,6 +170,11 @@ abstract class Gateway
         throw GatewayException::notImplemented(__FUNCTION__);
     }
 
+    protected function transfer(Transfer $transaction)
+    {
+        throw GatewayException::notImplemented(__FUNCTION__);
+    }
+
     /**
      * Creates and return the response from gateway.
      *

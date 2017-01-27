@@ -2,6 +2,8 @@
 
 namespace Larium\Pay\Transaction;
 
+use Larium\Pay\ParamsBag;
+
 class TransferTransaction implements Transfer
 {
     use Commit;
@@ -12,11 +14,18 @@ class TransferTransaction implements Transfer
 
     private $recipientIdentifier;
 
-    public function __construct($amount, $currency, $recipientIdentifier)
-    {
+    private $extraOptions;
+
+    public function __construct(
+        $amount,
+        $currency,
+        $recipientIdentifier,
+        array $extraOptions = []
+    ) {
         $this->amount = $amount;
         $this->currency = $currency;
         $this->recipientIdentifier = $recipientIdentifier;
+        $this->extraOptions = new ParamsBag($extraOptions);
     }
 
     /**
@@ -47,5 +56,10 @@ class TransferTransaction implements Transfer
     {
         return $this->amount > 0
             && !empty($this->recipientIdentifier);
+    }
+
+    public function getExtraOptions()
+    {
+        return $this->extraOptions;
     }
 }
