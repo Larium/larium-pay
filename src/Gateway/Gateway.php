@@ -10,6 +10,7 @@ use Larium\Pay\Transaction\Query;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Initial;
+use Larium\Pay\Transaction\Transfer;
 use Larium\Pay\Transaction\Purchase;
 use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
@@ -115,6 +116,8 @@ abstract class Gateway
                 return $this->query($transaction);
             case $transaction instanceof ThreedSecureAuthenticate:
                 return $this->threedSecureAuthenticate($transaction);
+            case $transaction instanceof Transfer:
+                return $this->transfer($transaction);
             default:
                 throw new \RuntimeException(
                     sprintf('Invalid transaction type `%s`', get_class($transaction))

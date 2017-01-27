@@ -65,4 +65,62 @@ class TransactionFactoryTest extends TestCase
 
         $this->assertTrue($txn->canCommit());
     }
+
+    public function testRetrieveFactory()
+    {
+        $txn = TransactionFactory::retrieve('1');
+
+        $this->assertInstanceOf(
+            'Larium\Pay\Transaction\RetrieveTransaction',
+            $txn
+        );
+    }
+
+    public function testInitiateFactory()
+    {
+        $txn = TransactionFactory::initiate(
+            self::AMOUNT,
+            'https://checkout.example.com/success',
+            'https://checkout.example.com/cancel'
+        );
+
+        $this->assertInstanceOf(
+            'Larium\Pay\Transaction\InitialTransaction',
+            $txn
+        );
+    }
+
+    public function testQueryFactory()
+    {
+        $txn = TransactionFactory::query(['id' => '1']);
+
+        $this->assertInstanceOf(
+            'Larium\Pay\Transaction\QueryTransaction',
+            $txn
+        );
+    }
+
+    public function testThreedSecureAuthenticateFactory()
+    {
+        $txn = TransactionFactory::ThreedSecureAuthenticate('pares', '1234567');
+
+        $this->assertInstanceOf(
+            'Larium\Pay\Transaction\ThreedSecureAuthenticateTransaction',
+            $txn
+        );
+    }
+
+    public function testTransferFactory()
+    {
+        $txn = TransactionFactory::transfer(
+            self::AMOUNT,
+            'EUR',
+            'customer@example.com'
+        );
+
+        $this->assertInstanceOf(
+            'Larium\Pay\Transaction\TransferTransaction',
+            $txn
+        );
+    }
 }

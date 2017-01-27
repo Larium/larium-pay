@@ -30,4 +30,45 @@ class TransactionFactory
     {
         return new Transaction\VoidTransaction($id, $extraOptions);
     }
+
+    public static function retrieve($id)
+    {
+        return new Transaction\RetrieveTransaction($id);
+    }
+
+    public static function initiate(
+        $amount,
+        $successUri,
+        $cancelUri,
+        array $extraOptions = []
+    ) {
+        return new Transaction\InitialTransaction(
+            $amount,
+            $successUri,
+            $cancelUri,
+            $extraOptions
+        );
+    }
+
+    public static function query(array $criteria)
+    {
+        return new Transaction\QueryTransaction($criteria);
+    }
+
+    public static function threedSecureAuthenticate($pares, $transactionId)
+    {
+        return new Transaction\ThreedSecureAuthenticateTransaction(
+            $pares,
+            $transactionId
+        );
+    }
+
+    public static function transfer($amount, $currency, $recipientIdentifier)
+    {
+        return new Transaction\TransferTransaction(
+            $amount,
+            $currency,
+            $recipientIdentifier
+        );
+    }
 }

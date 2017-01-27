@@ -67,7 +67,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return Larium\CredeitCard\CreditCard
+     * {@inheritdoc}
      */
     public function getCard()
     {
@@ -75,7 +75,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getAmount()
     {
@@ -83,7 +83,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return Larium\Pay\ParamsBag
+     * {@inheritdoc}
      */
     public function getAddress()
     {
@@ -97,7 +97,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getMerchantReference()
     {
@@ -111,7 +111,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getClientIp()
     {
@@ -125,7 +125,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -139,7 +139,7 @@ abstract class SaleTransaction implements Sale
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCustomerEmail()
     {
