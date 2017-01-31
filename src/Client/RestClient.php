@@ -8,7 +8,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Message\Authentication\BasicAuth;
 use Http\Discovery\MessageFactoryDiscovery;
 
-class RestClient implements Client
+class RestClient
 {
     private $baseUri;
 

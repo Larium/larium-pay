@@ -2,7 +2,7 @@
 
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Client\Client;
+use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Query;
 
 class MyRestGateway extends RestGateway
@@ -16,7 +16,7 @@ class MyRestGateway extends RestGateway
         return self::URI;
     }
 
-    protected function authenticate(Client $client)
+    protected function authenticate(RestClient $client)
     {
         return true;
     }

@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 
-class XmlClient implements Client
+class XmlClient
 {
     private $uri;
 
