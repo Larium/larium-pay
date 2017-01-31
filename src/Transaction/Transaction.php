@@ -6,10 +6,10 @@ interface Transaction
 {
     /**
      * Lock current transaction and decline further changes.
-     * If transaction state is invalid, an UnableToCommitException should be
+     * If transaction state is invalid, an TransactionException should be
      * thrown.
      *
-     * @throws UnableToCommitException
+     * @throws Larium\Pay\TransactionException
      *
      * @return void
      */

@@ -15,12 +15,17 @@ class GatewayFactory
     /**
      * Register a gateway with given name and class name.
      *
-     * @param string $name The name which factory will look for gateway.
-     * @param string $className The full class name to instatiate gateway.
+     * @throws Larium\Pay\GatewayException
+     *
+     * @param string $name The unique name for the gateway.
+     * @param string $className The full class name of gateway.
      * @return void
      */
     public static function register($name, $className)
     {
+        if (array_key_exists($name, self::$gateways)) {
+            throw GatewayException::gatewayAlreadyRegistered($name);
+        }
         self::$gateways[$name] = $className;
     }
 

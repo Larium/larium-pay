@@ -2,7 +2,7 @@
 
 namespace Larium\Pay\Transaction;
 
-use Larium\Pay\Exception\UnableToCommitException;
+use Larium\Pay\TransactionException;
 
 trait Commit
 {
@@ -17,7 +17,7 @@ trait Commit
     public function commit()
     {
         if (!$this->canCommit()) {
-            throw new UnableToCommitException();
+            throw TransactionExeption::unableToCommit();
         }
         $this->committed = true;
     }
@@ -36,7 +36,7 @@ trait Commit
     public function allowChanges()
     {
         if ($this->isCommitted()) {
-            throw new \RuntimeException('Transaction is already committed.');
+            throw TransactionException::alreadyCommited();
         }
 
         return true;

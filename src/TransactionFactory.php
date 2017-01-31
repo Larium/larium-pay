@@ -26,9 +26,9 @@ class TransactionFactory
         return new Transaction\RefundTransaction($amount, $id, $extraOptions);
     }
 
-    public static function void($id, array $extraOptions = [])
+    public static function cancel($id, array $extraOptions = [])
     {
-        return new Transaction\VoidTransaction($id, $extraOptions);
+        return new Transaction\CancelTransaction($id, $extraOptions);
     }
 
     public static function retrieve($id)

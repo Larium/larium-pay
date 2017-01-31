@@ -4,7 +4,7 @@ namespace Larium\Pay\Transaction;
 
 use Larium\Pay\ParamsBag;
 
-class VoidTransaction implements Void
+class CancelTransaction implements Cancel
 {
     use Commit;
 

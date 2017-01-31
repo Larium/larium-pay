@@ -31,7 +31,7 @@ class GatewayTest extends TestCase
     }
 
     /**
-     * @expectedException Larium\Pay\Exception\NotImplementedException
+     * @expectedException Larium\Pay\GatewayException
      */
     public function testNotImplementMethods()
     {

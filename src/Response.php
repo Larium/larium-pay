@@ -118,6 +118,8 @@ class Response
     /**
      * Returns the credit card response code from gateway, if exits.
      *
+     * This must be the {@link [https://en.wikipedia.org/wiki/ISO_8583#Response_code][ISO 8583]} ISO 8583 response code.
+     *
      * @return string
      */
     public function getResponseCode()

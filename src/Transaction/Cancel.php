@@ -2,7 +2,7 @@
 
 namespace Larium\Pay\Transaction;
 
-interface Void extends Transaction
+interface Cancel extends Transaction
 {
     public function getId();
 }

@@ -9,7 +9,7 @@ class SaleTransactionTest extends TestCase
     const AMOUNT = 1000;
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException Larium\Pay\TransactionException
      */
     public function testCommitTransaction()
     {

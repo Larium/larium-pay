@@ -81,9 +81,9 @@ class TransactionBuilder
         return $instance;
     }
 
-    public static function void($transactionId)
+    public static function cancel($transactionId)
     {
-        $instance = new self('Larium\Pay\Transaction\VoidTransaction');
+        $instance = new self('Larium\Pay\Transaction\CancelTransaction');
         $instance->constructArgs[] = $transactionId;
 
         return $instance;

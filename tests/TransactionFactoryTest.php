@@ -54,12 +54,12 @@ class TransactionFactoryTest extends TestCase
         $this->assertTrue($txn->canCommit());
     }
 
-    public function testVoidFactory()
+    public function testCancelFactory()
     {
-        $txn = TransactionFactory::void('123456789');
+        $txn = TransactionFactory::cancel('123456789');
 
         $this->assertInstanceOf(
-            'Larium\Pay\Transaction\VoidTransaction',
+            'Larium\Pay\Transaction\CancelTransaction',
             $txn
         );
 

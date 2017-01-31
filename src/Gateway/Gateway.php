@@ -5,8 +5,8 @@ namespace Larium\Pay\Gateway;
 use Larium\Pay\Response;
 use Larium\Pay\ParamsBag;
 use Larium\Pay\GatewayException;
-use Larium\Pay\Transaction\Void;
 use Larium\Pay\Transaction\Query;
+use Larium\Pay\Transaction\Cancel;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Initial;
@@ -15,7 +15,6 @@ use Larium\Pay\Transaction\Purchase;
 use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
 use Larium\Pay\Transaction\Transaction;
-use Larium\Pay\Exception\NotImplementedException;
 use Larium\Pay\Transaction\ThreedSecureAuthenticate;
 
 abstract class Gateway
@@ -106,7 +105,7 @@ abstract class Gateway
                 return $this->capture($transaction);
             case $transaction instanceof Refund:
                 return $this->refund($transaction);
-            case $transaction instanceof Void:
+            case $transaction instanceof Cancel:
                 return $this->void($transaction);
             case $transaction instanceof Retrieve:
                 return $this->retrieve($transaction);
@@ -145,7 +144,7 @@ abstract class Gateway
         throw GatewayException::notImplemented(__FUNCTION__);
     }
 
-    protected function void(Void $transaction)
+    protected function cancel(Cancel $transaction)
     {
         throw GatewayException::notImplemented(__FUNCTION__);
     }

@@ -2,8 +2,8 @@
 
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Transaction\Void;
 use Larium\Pay\Transaction\Query;
+use Larium\Pay\Transaction\Cancel;
 use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Initial;
@@ -30,7 +30,7 @@ class Bogus extends Gateway
     {
     }
 
-    protected function void(Void $transaction)
+    protected function cancel(Cancel $transaction)
     {
     }
 
