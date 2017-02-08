@@ -8,15 +8,30 @@ class InitialTransaction implements Initial
 {
     use Commit;
 
+    /**
+     * @var int
+     */
     private $amount = 0;
 
-    private $currency = 0;
+    /**
+     * @var string
+     */
+    private $currency = '';
 
+    /**
+     * @var string
+     */
     private $successUri;
 
+    /**
+     * @var string
+     */
     private $cancelUri;
 
-    private $extraOptions = [];
+    /**
+     * @var ParamsBag
+     */
+    private $extraOptions;
 
     public function __construct(
         $amount,

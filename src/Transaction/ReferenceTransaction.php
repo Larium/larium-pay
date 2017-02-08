@@ -19,7 +19,7 @@ abstract class ReferenceTransaction implements Transaction
     private $amount = 0;
 
     /**
-     * @var Larium\Pay\ParamsBag
+     * @var ParamsBag
      */
     private $extraOptions;
 

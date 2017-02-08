@@ -21,14 +21,14 @@ abstract class SaleTransaction implements Sale
     private $currency = '';
 
     /**
-     * @var Larium\CreditCard\CreditCard
+     * @var CreditCard
      */
     private $card;
 
     /**
-     * @var array
+     * @var ParamsBag
      */
-    private $address = [];
+    private $address;
 
     /**
      * @var string
@@ -51,7 +51,7 @@ abstract class SaleTransaction implements Sale
     private $customerEmail;
 
     /**
-     * @var Larium\Pay\ParamsBag
+     * @var ParamsBag
      */
     private $extraOptions;
 
