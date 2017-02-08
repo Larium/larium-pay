@@ -41,36 +41,9 @@ class XmlBuilder
         $args = reset($args);
         $name = array_shift($args);
         $block_or_string = array_shift($args);
-        $attribute = array_shift($args);
+        $attributes = array_shift($args);
 
-        if ($block_or_string instanceof Closure) {
-            $this->writer->startElement($name);
-            if ($attribute) {
-                foreach ($attribute as $key => $value) {
-                    $this->writer->startAttribute($key);
-                        $this->writer->text($value);
-                    $this->writer->endAttribute();
-                }
-            }
-            $block_or_string($this);
-            $this->writer->endElement();
-        } else if (is_string($block_or_string)
-            || is_numeric($block_or_string)
-            || is_null($block_or_string)
-        ) {
-            if ($attribute) {
-                $this->writer->startElement($name);
-                foreach ($attribute as $key => $value) {
-                    $this->writer->startAttribute($key);
-                    $this->writer->text($value);
-                    $this->writer->endAttribute();
-                }
-                $this->writer->text($block_or_string);
-                $this->writer->endElement();
-            } else {
-                $this->writer->writeElement($name, $block_or_string);
-            }
-        }
+        $this->createElement($name, $block_or_string, $attributes);
 
         return $this;
     }
@@ -87,5 +60,31 @@ class XmlBuilder
         $this->writer->endDocument();
 
         return $this->writer->outputMemory();
+    }
+
+    private function createElement($name, $body, array $attributes = null)
+    {
+        $this->writer->startElement($name);
+
+        $this->createAttributes($attributes);
+
+        if (is_callable($body)) {
+            $body($this);
+        } else {
+            $this->writer->text($body);
+        }
+
+        $this->writer->endElement();
+    }
+
+    private function createAttributes(array $attributes = null)
+    {
+        if ($attributes) {
+            foreach ($attributes as $key => $value) {
+                $this->writer->startAttribute($key);
+                $this->writer->text($value);
+                $this->writer->endAttribute();
+            }
+        }
     }
 }
