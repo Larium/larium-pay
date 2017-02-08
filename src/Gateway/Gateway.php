@@ -179,7 +179,7 @@ abstract class Gateway
      *                              reason.
      * @param string $transactionId The unique identifier from transaction.
      * @param string $errorCode     The error code if transaction was failed.
-     * @param string $responsecCode The ISO 8583 response code. Not always
+     * @param string $responseCode  The ISO 8583 response code. Not always
      *                              available.
      * @param array  $payload       An associative array of the response from
      *                              gateway including http status and headers.
@@ -195,7 +195,7 @@ abstract class Gateway
         $transactionId,
         $errorCode = '0',
         $responseCode = null,
-        array $payload = null,
+        array $payload = [],
         $rawResponse = null,
         $rawRequest = null
     ) {
