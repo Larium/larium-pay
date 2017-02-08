@@ -11,6 +11,8 @@ trait Commit
      */
     private $committed = false;
 
+    abstract public function canCommit();
+
     /**
      * {@inheritdoc}
      */
