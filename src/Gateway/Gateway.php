@@ -25,6 +25,20 @@ abstract class Gateway
 
     private $responseCallback;
 
+    private $transactionToMethod = [
+        Query::class => 'query',
+        Cancel::class => 'cancel',
+        Refund::class => 'refund',
+        Capture::class => 'capture',
+        Initial::class => 'initiate',
+        Transfer::class => 'transfer',
+        Purchase::class => 'purchase',
+        Retrieve::class => 'retrieve',
+        Authorize::class => 'authorize',
+        Transaction::class => 'transaction',
+        ThreedSecureAuthenticate::class => 'threedSecureAuthenticate',
+    ];
+
     /**
      * Return whether the response is success or not.
      *
@@ -96,32 +110,15 @@ abstract class Gateway
 
         $this->responseCallback = $responseCallback;
 
-        switch (true) {
-            case $transaction instanceof Purchase:
-                return $this->purchase($transaction);
-            case $transaction instanceof Authorize:
-                return $this->authorize($transaction);
-            case $transaction instanceof Capture:
-                return $this->capture($transaction);
-            case $transaction instanceof Refund:
-                return $this->refund($transaction);
-            case $transaction instanceof Cancel:
-                return $this->cancel($transaction);
-            case $transaction instanceof Retrieve:
-                return $this->retrieve($transaction);
-            case $transaction instanceof Initial:
-                return $this->initiate($transaction);
-            case $transaction instanceof Query:
-                return $this->query($transaction);
-            case $transaction instanceof ThreedSecureAuthenticate:
-                return $this->threedSecureAuthenticate($transaction);
-            case $transaction instanceof Transfer:
-                return $this->transfer($transaction);
-            default:
-                throw new \RuntimeException(
-                    sprintf('Invalid transaction type `%s`', get_class($transaction))
-                );
+        foreach ($this->transactionToMethod as $class => $method) {
+            if ($transaction instanceof $class) {
+                return $this->$method($transaction);
+            }
         }
+
+        throw new \RuntimeException(
+            sprintf('Invalid transaction type `%s`', get_class($transaction))
+        );
     }
 
     protected function purchase(Purchase $transaction)
