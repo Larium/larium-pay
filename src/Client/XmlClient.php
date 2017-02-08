@@ -11,6 +11,8 @@ class XmlClient
 {
     private $uri;
 
+    private $rawRequest;
+
     public function __construct($uri, array $options = [])
     {
         $this->uri = $uri;

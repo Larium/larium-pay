@@ -106,7 +106,7 @@ abstract class Gateway
             case $transaction instanceof Refund:
                 return $this->refund($transaction);
             case $transaction instanceof Cancel:
-                return $this->void($transaction);
+                return $this->cancel($transaction);
             case $transaction instanceof Retrieve:
                 return $this->retrieve($transaction);
             case $transaction instanceof Initial:
@@ -198,7 +198,7 @@ abstract class Gateway
         $transactionId,
         $errorCode = '0',
         $responseCode = null,
-        $payload = null,
+        array $payload = null,
         $rawResponse = null,
         $rawRequest = null
     ) {
