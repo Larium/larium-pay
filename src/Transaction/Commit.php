@@ -19,7 +19,7 @@ trait Commit
     public function commit()
     {
         if (!$this->canCommit()) {
-            throw TransactionExeption::unableToCommit();
+            throw TransactionException::unableToCommit();
         }
         $this->committed = true;
     }
