@@ -40,7 +40,7 @@ class RestClient
 
     public function addHeader($name, $value)
     {
-        $this->headers[] = "{$name}: {$value}";
+        $this->headers[$name] = $value;
     }
 
     public function get($id = null, $payload = null)
