@@ -14,7 +14,6 @@ use Larium\Pay\Transaction\Transfer;
 use Larium\Pay\Transaction\Purchase;
 use Larium\Pay\Transaction\Retrieve;
 use Larium\Pay\Transaction\Authorize;
-use Larium\Pay\Transaction\Transaction;
 use Larium\Pay\Transaction\ThreedSecureAuthenticate;
 
 abstract class Gateway
