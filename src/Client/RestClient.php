@@ -2,6 +2,7 @@
 
 namespace Larium\Pay\Client;
 
+use Larium\Http\Client;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Http\Discovery\HttpClientDiscovery;
@@ -153,7 +154,10 @@ class RestClient
 
     protected function discoverClient()
     {
-        return HttpClientDiscovery::find();
+        $client = new Client();
+        $client->setOptions($this->options);
+
+        return $client;
     }
 
     private function sendRequest(RequestInterface $request)
