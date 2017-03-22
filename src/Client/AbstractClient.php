@@ -7,6 +7,10 @@ use Psr\Http\Message\RequestInterface;
 
 abstract class AbstractClient
 {
+    protected $rawRequest;
+
+    protected $options = [];
+
     abstract protected function authenticate(RequestInterface $request);
 
     protected function sendRequest(RequestInterface $request)

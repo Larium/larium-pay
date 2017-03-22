@@ -22,10 +22,6 @@ class RestClient extends AbstractClient
 
     private $headers = [];
 
-    private $options = [];
-
-    private $rawRequest;
-
     public function __construct(
         $baseUri,
         $resource,
