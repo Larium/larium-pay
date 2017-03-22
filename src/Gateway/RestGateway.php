@@ -20,7 +20,7 @@ abstract class RestGateway extends Gateway
      * So here we can add directly to client the appropriate authentication
      * info.
      *
-     * @param Larium\Pay\Client\Client $client
+     * @param RestClient $client
      * @return void
      */
     abstract protected function authenticate(RestClient $client);
@@ -33,7 +33,7 @@ abstract class RestGateway extends Gateway
      * gateway to request.
      *
      * @param string $resource
-     * @return Larium\Pay\Client\RestClient.
+     * @return RestClient
      */
     protected function getRestClient($resource)
     {
@@ -48,7 +48,7 @@ abstract class RestGateway extends Gateway
      *
      * @param string $uri The base uri path of gateway.
      * @param string $resource The resource path to request.
-     * @return Larium\Pay\Client\RestClient.
+     * @return RestClient.
      */
     protected function createClient($uri, $resource)
     {
@@ -60,7 +60,7 @@ abstract class RestGateway extends Gateway
      *
      * @param array $response The response returned from RestClient @see
      *                        RestClient::resolveResponse method
-     * @return Larium\Pay\Response
+     * @return \Larium\Pay\Response
      */
     protected function getResponse(array $response)
     {

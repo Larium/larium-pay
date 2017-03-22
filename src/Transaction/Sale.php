@@ -7,7 +7,7 @@ use Larium\Pay\CardReference;
 interface Sale extends Transaction
 {
     /**
-     * @return Larium\CreditCard\CreditCard
+     * @return \Larium\CreditCard\CreditCard
      */
     public function getCard();
 
@@ -35,7 +35,7 @@ interface Sale extends Transaction
      *      $address['phone']
      * </code>
      *
-     * @return Larium\Pay\ParamsBag
+     * @return \Larium\Pay\ParamsBag
      */
     public function getAddress();
 
@@ -60,7 +60,7 @@ interface Sale extends Transaction
     public function getCustomerEmail();
 
     /**
-     * @return Larium\Pay\ParamsBag
+     * @return \Larium\Pay\ParamsBag
      */
     public function getExtraOptions();
 }
