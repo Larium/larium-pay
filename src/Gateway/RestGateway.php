@@ -48,7 +48,7 @@ abstract class RestGateway extends Gateway
      *
      * @param string $uri The base uri path of gateway.
      * @param string $resource The resource path to request.
-     * @return RestClient.
+     * @return RestClient
      */
     protected function createClient($uri, $resource)
     {

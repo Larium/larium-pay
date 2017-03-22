@@ -14,13 +14,9 @@ class TransactionBuilder
 {
     private $transaction;
 
-    private $amount;
-
     private $currency;
 
     private $transactionInstance;
-
-    private $transactionId;
 
     private $extraOptions = [];
 
