@@ -2,14 +2,13 @@
 
 namespace Larium\Pay\Client;
 
-use Larium\Http\Client;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Message\Authentication\BasicAuth;
 use Http\Discovery\MessageFactoryDiscovery;
 
-class RestClient
+class RestClient extends AbstractClient
 {
     private $baseUri;
 
@@ -64,25 +63,22 @@ class RestClient
 
     public function post($payload)
     {
-        $factory = $this->getMessageFactory();
-        $request = $factory->createRequest(
-            'POST',
-            $this->getUri(),
-            $this->headers,
-            $this->normalizePayload($payload)
-        );
-
-        $request = $this->authenticate($request);
-
-        return $this->resolveResponse($this->sendRequest($request));
+        return $this->request($this->getUri(), 'POST', $payload);
     }
 
     public function put($id, $payload = null)
     {
+        $uri = $this->getUri($id);
+
+        return $this->request($uri, 'PUT', $payload);
+    }
+
+    private function request($uri, $method, $payload = null)
+    {
         $factory = $this->getMessageFactory();
         $request = $factory->createRequest(
-            'PUT',
-            $this->getUri($id),
+            $method,
+            $uri,
             $this->headers,
             $this->normalizePayload($payload)
         );
@@ -94,6 +90,9 @@ class RestClient
 
     public function delete($id)
     {
+        $uri = $this->getUri($id);
+
+        return $this->request($uri, 'DELETE');
     }
 
     public function getUri($id = null)
@@ -118,7 +117,7 @@ class RestClient
         $this->headerAuthentication = ['name' => $name, 'value' => $value];
     }
 
-    private function authenticate(RequestInterface $request)
+    protected function authenticate(RequestInterface $request)
     {
         if ($this->username || $this->pass) {
             $authentication = new BasicAuth($this->username, $this->pass);
@@ -150,28 +149,6 @@ class RestClient
     private function getMessageFactory()
     {
         return MessageFactoryDiscovery::find();
-    }
-
-    protected function discoverClient()
-    {
-        $client = new Client();
-        $client->setOptions($this->options);
-
-        return $client;
-    }
-
-    private function sendRequest(RequestInterface $request)
-    {
-        $request = $this->authenticate($request);
-
-        $response = $this->discoverClient()->sendRequest($request);
-
-        if ($request->getBody()->isSeekable()) {
-            $request->getBody()->rewind();
-        }
-        $this->rawRequest = $request->getBody()->__toString();
-
-        return $response;
     }
 
     /**

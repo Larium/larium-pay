@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 
-class XmlClient
+class XmlClient extends AbstractClient
 {
     private $uri;
 
@@ -40,11 +40,6 @@ class XmlClient
         return MessageFactoryDiscovery::find();
     }
 
-    protected function discoverClient()
-    {
-        return HttpClientDiscovery::find();
-    }
-
     /**
      * Resolve the response from client.
      *
@@ -69,15 +64,8 @@ class XmlClient
         );
     }
 
-    private function sendRequest(RequestInterface $request)
+    protected function authenticate(RequestInterface $request)
     {
-        $response = $this->discoverClient()->sendRequest($request);
-
-        if ($request->getBody()->isSeekable()) {
-            $request->getBody()->rewind();
-        }
-        $this->rawRequest = $request->getBody()->__toString();
-
-        return $response;
+        return $request;
     }
 }
