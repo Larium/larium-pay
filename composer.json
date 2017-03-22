@@ -25,7 +25,8 @@
     "require-dev": {
         "php-http/mock-client": "^0.3",
         "php-http/curl-client": "^1.0",
-        "zendframework/zend-diactoros": "^1.0"
+        "zendframework/zend-diactoros": "^1.0",
+        "phpunit/phpunit": "~5.7.0"
     },
     "suggest" : {
         "php-http/message": "Provides HTTP Message related tools",
