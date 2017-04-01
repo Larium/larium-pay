@@ -4,6 +4,7 @@ namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\RestClient;
 use Larium\Pay\Transaction\Query;
+use Larium\Pay\Transaction\Purchase;
 
 class MyRestGateway extends RestGateway
 {
@@ -14,6 +15,16 @@ class MyRestGateway extends RestGateway
     protected function getBaseUri()
     {
         return self::URI;
+    }
+
+    public function purchase(Purchase $transaction)
+    {
+        return $this->getResponse([
+            'status' => 200,
+            'body' => ['status' => 'success'],
+            'raw_response' => '{"status":"success"}',
+            'raw_request' => ''
+        ]);
     }
 
     protected function authenticate(RestClient $client)

@@ -3,6 +3,7 @@
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\TestCase;
+use Larium\CreditCard\CreditCard;
 use Larium\Pay\Transaction\VoidTransaction;
 use Larium\Pay\Transaction\QueryTransaction;
 use Larium\Pay\Transaction\RefundTransaction;
@@ -62,6 +63,19 @@ class GatewayTest extends TestCase
         ]);
 
         $g->execute($txn);
+    }
+
+    public function testCustomResponse()
+    {
+        $gateway = new MyRestGateway(['username'=>'a', 'password'=>'b']);
+
+        $txn = new PurchaseTransaction(1000, new CreditCard(['token'=>'1']));
+
+        $response = $gateway->execute($txn, function ($response, $payload) {
+            return ['message' => $payload['status']];
+        });
+
+        $this->assertArrayHasKey('message', $response);
     }
 
     public function getExecuteMethods()
