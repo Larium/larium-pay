@@ -6,10 +6,10 @@ use RuntimeException;
 
 class GatewayException extends RuntimeException
 {
-    public static function notImplemented($method)
+    public static function notImplemented($transaction, $gateway)
     {
         return new self(
-            sprintf("Method `%s` is not supported!", $method)
+            sprintf("Gateway `%s` does not support `%s` transaction", $gateway, $transaction)
         );
     }
 

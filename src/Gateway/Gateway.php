@@ -122,52 +122,52 @@ abstract class Gateway
 
     protected function purchase(Purchase $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function authorize(Authorize $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function capture(Capture $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function refund(Refund $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function cancel(Cancel $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function retrieve(Retrieve $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function initiate(Initial $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function query(Query $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function threedSecureAuthenticate(ThreedSecureAuthenticate $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     protected function transfer(Transfer $transaction)
     {
-        throw GatewayException::notImplemented(__FUNCTION__);
+        throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
     /**

@@ -32,6 +32,7 @@ class GatewayTest extends TestCase
 
     /**
      * @expectedException Larium\Pay\GatewayException
+     * @expectedExceptionMessage Gateway `Larium\Pay\Gateway\TestGateway` does not support `Larium\Pay\Transaction\RefundTransaction
      */
     public function testNotImplementMethods()
     {
