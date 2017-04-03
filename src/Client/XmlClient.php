@@ -11,10 +11,6 @@ class XmlClient extends AbstractClient
 {
     private $uri;
 
-    private $rawRequest;
-
-    private $options;
-
     public function __construct($uri, array $options = [])
     {
         $this->uri = $uri;
