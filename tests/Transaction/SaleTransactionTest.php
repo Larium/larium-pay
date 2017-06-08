@@ -18,7 +18,7 @@ class SaleTransactionTest extends TestCase
 
         $txn = new PurchaseTransaction($amount, $card);
 
-        $txn->setMerchatReference('ORDER-WER-TYD');
+        $txn->setMerchantReference('ORDER-WER-TYD');
         $txn->commit();
 
         $txn->setDescription('Bogus payment');

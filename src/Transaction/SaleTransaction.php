@@ -104,7 +104,7 @@ abstract class SaleTransaction implements Sale
         return $this->merchantReference;
     }
 
-    public function setMerchatReference($merchantReference)
+    public function setMerchantReference($merchantReference)
     {
         $this->allowChanges();
         $this->merchantReference = $merchantReference;
