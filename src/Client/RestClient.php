@@ -28,7 +28,7 @@ class RestClient extends AbstractClient
         array $headers = [],
         array $options = []
     ) {
-        $this->baseUri = rtrim($baseUri, '/') . '/';
+        $this->baseUri = $baseUri;
         $this->headers = $headers;
         $this->options = $options;
         $this->resource = $resource;
@@ -93,7 +93,7 @@ class RestClient extends AbstractClient
 
     public function getUri($id = null)
     {
-        $uri = sprintf('%s%s', $this->baseUri, $this->resource);
+        $uri = sprintf('%s/%s', $this->baseUri, $this->resource);
 
         if ($id) {
             $uri = sprintf($uri, $id);
