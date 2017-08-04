@@ -93,7 +93,9 @@ class RestClient extends AbstractClient
 
     public function getUri($id = null)
     {
-        $uri = sprintf('%s/%s', $this->baseUri, $this->resource);
+        $uri = $this->resource
+            ? sprintf('%s/%s', $this->baseUri, $this->resource)
+            : $this->baseUri;
 
         if ($id) {
             $uri = sprintf($uri, $id);
