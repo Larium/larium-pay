@@ -13,9 +13,17 @@ use Larium\Pay\Transaction\Authorize;
 
 class Bogus extends Gateway
 {
-
     protected function purchase(Purchase $transaction)
     {
+        $response = [
+            'status' => 200,
+            'headers' => [],
+            'body' => null,
+            'raw_response' => null,
+            'raw_request' => null,
+        ];
+
+        return $this->getResponse($response);
     }
 
     protected function authorize(Authorize $transaction)
@@ -64,5 +72,19 @@ class Bogus extends Gateway
 
     protected function responseCode(array $response)
     {
+    }
+
+    private function getResponse(array $response)
+    {
+        return $this->createResponse(
+            $this->success($response),
+            $this->message($response),
+            $this->transactionId($response),
+            $this->errorCode($response),
+            $this->responseCode($response),
+            $response['body'],
+            $response['raw_response'],
+            $response['raw_request']
+        );
     }
 }

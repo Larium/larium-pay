@@ -2,7 +2,9 @@
 
 namespace Larium\Pay\Client;
 
-class RestClientTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class RestClientTest extends TestCase
 {
     public function testResourceUri()
     {

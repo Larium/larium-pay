@@ -2,7 +2,9 @@
 
 namespace Larium\Pay;
 
-class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class GatewayFactoryTest extends TestCase
 {
     public function testSuccessGatewayCreation()
     {

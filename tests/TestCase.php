@@ -4,8 +4,9 @@ namespace Larium\Pay;
 
 use Larium\Pay\Response;
 use Larium\CreditCard\CreditCard;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PHPUnitTestCase
 {
     public function getFixture($gateway)
     {
@@ -64,7 +65,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
             ->setMethods(['createClient'])
             ->getMock();
 
-        $gatewayStub->method('createClient')
+        $gatewayStub->expects($this->any())
+            ->method('createClient')
             ->will($this->returnValue($clientStub));
 
         return $gatewayStub;

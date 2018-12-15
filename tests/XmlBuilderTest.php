@@ -2,7 +2,9 @@
 
 namespace Larium\Pay;
 
-class XmlBuilderTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class XmlBuilderTest extends TestCase
 {
     public function testBuildWithClosure()
     {
