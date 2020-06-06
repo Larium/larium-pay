@@ -11,10 +11,17 @@ class XmlClient extends AbstractClient
 {
     private $uri;
 
+    private $headers = [];
+
     public function __construct($uri, array $options = [])
     {
         $this->uri = $uri;
         $this->options = $options;
+    }
+
+    public function addHeader($name, $value)
+    {
+        $this->headers[$name] = $value;
     }
 
     /**
@@ -26,7 +33,7 @@ class XmlClient extends AbstractClient
     public function post($xml)
     {
         $factory = $this->getMessageFactory();
-        $request = $factory->createRequest('POST', $this->uri, [], $xml);
+        $request = $factory->createRequest('POST', $this->uri, $this->headers, $xml);
 
         return $this->resolveResponse($this->sendRequest($request));
     }
