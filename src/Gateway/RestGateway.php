@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\RestClient;
+use Larium\Pay\Response;
 
 abstract class RestGateway extends Gateway
 {
@@ -11,7 +14,7 @@ abstract class RestGateway extends Gateway
      *
      * @return string
      */
-    abstract protected function getBaseUri();
+    abstract protected function getBaseUri(): string;
 
     /**
      * Authenticate gateway.
@@ -23,7 +26,7 @@ abstract class RestGateway extends Gateway
      * @param RestClient $client
      * @return void
      */
-    abstract protected function authenticate(RestClient $client);
+    abstract protected function authenticate(RestClient $client): void;
 
     /**
      * Returns the RestClient for given resource name.
@@ -35,7 +38,7 @@ abstract class RestGateway extends Gateway
      * @param string $resource
      * @return RestClient
      */
-    protected function getRestClient($resource)
+    protected function getRestClient($resource): RestClient
     {
         $client = $this->createClient($this->getBaseUri(), $resource);
         $this->authenticate($client);
@@ -50,7 +53,7 @@ abstract class RestGateway extends Gateway
      * @param string $resource The resource path to request.
      * @return RestClient
      */
-    protected function createClient($uri, $resource)
+    protected function createClient($uri, $resource): RestClient
     {
         return new RestClient($uri, $resource);
     }
@@ -60,9 +63,9 @@ abstract class RestGateway extends Gateway
      *
      * @param array $response The response returned from RestClient @see
      *                        RestClient::resolveResponse method
-     * @return \Larium\Pay\Response
+     * @return \Larium\Pay\Response|mixed
      */
-    protected function getResponse(array $response)
+    protected function getResponse(array $response): mixed
     {
         return $this->createResponse(
             $this->success($response),

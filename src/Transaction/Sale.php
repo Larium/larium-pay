@@ -1,8 +1,8 @@
 <?php
 
-namespace Larium\Pay\Transaction;
+declare(strict_types=1);
 
-use Larium\Pay\CardReference;
+namespace Larium\Pay\Transaction;
 
 interface Sale extends Transaction
 {

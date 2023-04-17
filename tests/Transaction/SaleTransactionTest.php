@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Transaction;
 
 use Larium\Pay\TestCase;
+use Larium\Pay\TransactionException;
 
 class SaleTransactionTest extends TestCase
 {
-    const AMOUNT = 1000;
+    public const AMOUNT = 1000;
 
     /**
      * @expectedException Larium\Pay\TransactionException
      */
     public function testCommitTransaction()
     {
+        $this->expectException(TransactionException::class);
+
         $amount = self::AMOUNT;
         $card = $this->getCard();
 

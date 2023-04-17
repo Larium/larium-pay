@@ -2,3 +2,6 @@ vendor
 composer.lock
 tests/fixtures.ini
 build
+.DS_Store
+.vscode
+.phpunit.cache

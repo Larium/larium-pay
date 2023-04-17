@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
 class GatewayFactory
 {
-    const GATEWAY_NAMESPACE = 'Larium\\Pay\\Gateway\\';
+    public const GATEWAY_NAMESPACE = 'Larium\\Pay\\Gateway\\';
 
     private static $gateways = [];
 

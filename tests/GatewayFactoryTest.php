@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
-class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class GatewayFactoryTest extends TestCase
 {
     public function testSuccessGatewayCreation()
     {
@@ -20,6 +24,8 @@ class GatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailedGatewayCreation()
     {
-        $gateway = GatewayFactory::create('UnknownGateway', []);
+        $this->expectException(GatewayException::class);
+        $this->expectExceptionMessage('Could not resolve gateway with name `UnknownGateway`');
+        GatewayFactory::create('UnknownGateway', []);
     }
 }

@@ -1,19 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Client;
 
 use Larium\Http\Client;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractClient
 {
-    protected $rawRequest;
+    protected string $rawRequest = '';
 
-    protected $options = [];
+    protected array $options = [];
 
-    abstract protected function authenticate(RequestInterface $request);
+    abstract protected function authenticate(RequestInterface $request): RequestInterface;
 
-    protected function sendRequest(RequestInterface $request)
+    abstract public function addHeader(string $name, string $value): void;
+
+    protected function sendRequest(RequestInterface $request): ResponseInterface
     {
         $request = $this->authenticate($request);
 
@@ -27,10 +33,9 @@ abstract class AbstractClient
         return $response;
     }
 
-    protected function discoverClient()
+    protected function discoverClient(): ClientInterface
     {
-        $client = new Client();
-        $client->setOptions($this->options);
+        $client = new Client($this->options);
 
         return $client;
     }

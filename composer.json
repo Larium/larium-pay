@@ -11,25 +11,21 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": ">=8.1",
         "ext-curl": "*",
         "ext-simplexml": "*",
-        "larium/credit-card": "@stable",
+        "larium/credit-card": "^2.0",
         "psr/http-message": "^1.0",
-        "php-http/client-implementation": "^1.0",
-        "php-http/httplug": "^1.0",
-        "php-http/message-factory": "^1.0",
-        "php-http/discovery": "^1.0",
-        "larium/http-client": "~1.2.0"
+        "php-http/discovery": "^1.15",
+        "larium/http-client": "^2.0"
     },
     "require-dev": {
-        "php-http/mock-client": "^0.3",
-        "php-http/curl-client": "^1.0",
-        "zendframework/zend-diactoros": "^1.0"
+        "php-http/mock-client": "^1.5",
+        "laminas/laminas-diactoros": "^2.0",
+        "phpunit/phpunit": "^10.0"
     },
     "suggest" : {
-        "php-http/message": "Provides HTTP Message related tools",
-        "zendframework/zend-diactoros": "Provides PSR-7 Message Implementation",
+        "laminas/laminas-diactoros": "Provides PSR-7 Message Implementation",
         "guzzlehttp/psr7": "Provides PSR-7 Message Implementation"
     },
     "minimum-stability": "stable",
@@ -41,6 +37,11 @@
     "autoload-dev": {
         "psr-4": {
             "Larium\\Pay\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }

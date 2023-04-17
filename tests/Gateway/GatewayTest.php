@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\TestCase;
 use Larium\CreditCard\CreditCard;
-use Larium\Pay\Transaction\VoidTransaction;
-use Larium\Pay\Transaction\QueryTransaction;
-use Larium\Pay\Transaction\RefundTransaction;
+use Larium\Pay\GatewayException;
+use Larium\Pay\TestCase;
+use Larium\Pay\Transaction\AuthorizeTransaction;
 use Larium\Pay\Transaction\CaptureTransaction;
 use Larium\Pay\Transaction\PurchaseTransaction;
-use Larium\Pay\Transaction\AuthorizeTransaction;
+use Larium\Pay\Transaction\QueryTransaction;
+use Larium\Pay\Transaction\RefundTransaction;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class GatewayTest extends TestCase
 {
@@ -20,8 +23,9 @@ class GatewayTest extends TestCase
     {
         $transaction = $this->$transactionGetter();
 
+        /** @var Bogus|MockObject $bogus */
         $bogus = $this->getMockBuilder('Larium\Pay\Gateway\Bogus')
-                         ->setMethods(array($method))
+                         ->onlyMethods([$method])
                          ->getMock();
 
         $bogus->expects($this->once())
@@ -37,6 +41,8 @@ class GatewayTest extends TestCase
      */
     public function testNotImplementMethods()
     {
+        $this->expectException(GatewayException::class);
+        $this->expectExceptionMessage('Gateway `Larium\Pay\Gateway\TestGateway` does not support `Larium\Pay\Transaction\RefundTransaction');
         $bogus = new TestGateway();
         $transaction = $this->getRefundTransaction();
 
@@ -62,6 +68,9 @@ class GatewayTest extends TestCase
             'limit' => 10,
         ]);
 
+        $g->expects($this->once())
+            ->method('query');
+
         $g->execute($txn);
     }
 
@@ -78,7 +87,7 @@ class GatewayTest extends TestCase
         $this->assertArrayHasKey('message', $response);
     }
 
-    public function getExecuteMethods()
+    public static function getExecuteMethods()
     {
         return [
             [

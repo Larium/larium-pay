@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
-use Larium\Pay\Response;
 use Larium\CreditCard\CreditCard;
+use Larium\Pay\Client\XmlClient;
+use Larium\Pay\Gateway\Gateway;
+use Larium\Pay\Response;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends FrameworkTestCase
 {
-    public function getFixture($gateway)
+    public function getFixture(string $gateway): array
     {
         $ini = parse_ini_file(__DIR__ . "/fixtures.ini", true);
 
@@ -16,18 +22,21 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return $data[$gateway];
     }
 
-    protected function assertSuccess(Response $response)
+    protected function assertSuccess(Response $response): void
     {
         $this->assertTrue($response->isSuccess());
     }
 
-    protected function assertFailure(Response $response)
+    protected function assertFailure(Response $response): void
     {
         $this->assertFalse($response->isSuccess());
     }
 
-    protected function mockRestGatewayClient($gatewayClassName, $options, array $response)
-    {
+    protected function mockRestGatewayClient(
+        string $gatewayClassName,
+        array $options,
+        array $response
+    ): Gateway|MockObject {
         return $this->mockGatewayClient(
             'Larium\Pay\Client\RestClient',
             $gatewayClassName,
@@ -36,8 +45,11 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function mockXmlGatewayClient($gatewayClassName, $options, array $response)
-    {
+    protected function mockXmlGatewayClient(
+        string $gatewayClassName,
+        array $options,
+        array $response
+    ): XmlClient|MockObject {
         return $this->mockGatewayClient(
             'Larium\Pay\Client\XmlClient',
             $gatewayClassName,
@@ -46,31 +58,35 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function mockGatewayClient($clientClass, $gatewayClassName, $options, array $response)
-    {
+    protected function mockGatewayClient(
+        string $clientClass,
+        string $gatewayClassName,
+        array $options,
+        array $response
+    ): Gateway|MockObject {
         $clientStub = $this->getMockBuilder($clientClass)
             ->disableOriginalConstructor()
-            ->setMethods(['resolveResponse', 'discoverClient'])
+            ->onlyMethods(['resolveResponse', 'discoverClient'])
             ->getMock();
 
         $clientStub->method('resolveResponse')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         $clientStub->method('discoverClient')
             ->willReturn(new \Http\Mock\Client());
 
         $gatewayStub = $this->getMockBuilder($gatewayClassName)
             ->setConstructorArgs([$options])
-            ->setMethods(['createClient'])
+            ->onlyMethods(['createClient', 'query'])
             ->getMock();
 
         $gatewayStub->method('createClient')
-            ->will($this->returnValue($clientStub));
+            ->willReturn($clientStub);
 
         return $gatewayStub;
     }
 
-    protected function getCard()
+    protected function getCard(): CreditCard
     {
         return new CreditCard([
             'name' => 'JOHN DOE',
@@ -83,6 +99,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function generateUniqueId()
     {
-        return substr(uniqid(rand(), true), 0, 10);
+        return substr(uniqid(strval(random_int(0, 30)), true), 0, 10);
     }
 }

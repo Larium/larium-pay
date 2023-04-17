@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
 class TransactionFactoryTest extends TestCase
 {
-    const AMOUNT = 2000;
+    public const AMOUNT = 2000;
 
     public function testPurchaseFactory()
     {
