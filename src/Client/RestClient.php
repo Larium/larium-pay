@@ -20,7 +20,7 @@ class RestClient extends AbstractClient
     public function __construct(
         private readonly string $baseUri,
         private readonly string $resource,
-        private readonly array $headers = [],
+        private array $headers = [],
         array $options = []
     ) {
         $this->options = $options;
@@ -31,7 +31,7 @@ class RestClient extends AbstractClient
         $this->headers[$name] = $value;
     }
 
-    public function get(string $id = null, string|array $payload = null): array
+    public function get(string $id = null, string|array $payload = ''): array
     {
         $uri = $this->getUri($id);
         if ($query = $this->normalizePayload($payload)) {
@@ -46,7 +46,7 @@ class RestClient extends AbstractClient
         return $this->request($this->getUri(), 'POST', $payload);
     }
 
-    public function put(string $id, string|array $payload = null): array
+    public function put(string $id, string|array $payload = ''): array
     {
         $uri = $this->getUri($id);
 
@@ -56,7 +56,7 @@ class RestClient extends AbstractClient
     private function request(
         string $uri,
         string $method,
-        string|array $payload = null
+        string|array $payload = ''
     ): array {
         $factory = Psr17FactoryDiscovery::findRequestFactory();
         $request = $factory->createRequest(
@@ -68,7 +68,7 @@ class RestClient extends AbstractClient
             $request = $request->withHeader($name, $value);
         }
 
-        if ($payload !== null) {
+        if (!empty($payload)) {
             $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($payload);
             $request = $request->withBody($stream);
         }
@@ -133,11 +133,11 @@ class RestClient extends AbstractClient
 
     private function normalizePayload(string|array $payload): string
     {
-        if (is_array($payload)) {
-            return http_build_query($payload);
+        if (is_string($payload)) {
+            return $payload;
         }
 
-        return $payload;
+        return http_build_query($payload);
     }
 
     /**
