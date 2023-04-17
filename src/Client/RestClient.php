@@ -68,6 +68,10 @@ class RestClient extends AbstractClient
             $request = $request->withHeader($name, $value);
         }
 
+        if (is_array($payload)) {
+            $payload = $this->normalizePayload($payload);
+        }
+
         if (!empty($payload)) {
             $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($payload);
             $request = $request->withBody($stream);

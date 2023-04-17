@@ -192,7 +192,7 @@ abstract class Gateway
      * @param string $rawResponse   The raw response of gateway.
      * @param string $rawRequest    The raw request to gateway.
      *
-     * @return Larium\Pay\Response|mixed Response may be a user response if $responseCallback
+     * @return \Larium\Pay\Response|mixed Response may be a user response if $responseCallback
      *                                   param is used in execute method
      */
     protected function createResponse(

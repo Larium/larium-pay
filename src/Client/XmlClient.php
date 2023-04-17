@@ -33,7 +33,13 @@ class XmlClient extends AbstractClient
     public function post(string $xml): array
     {
         $factory = Psr17FactoryDiscovery::findRequestFactory();
-        $request = $factory->createRequest('POST', $this->uri, $this->headers, $xml);
+        $request = $factory->createRequest('POST', $this->uri);
+        foreach ($this->headers as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        };
+
+        $body = Psr17FactoryDiscovery::findStreamFactory()->createStream($xml);
+        $request = $request->withBody($body);
 
         return $this->resolveResponse($this->sendRequest($request));
     }

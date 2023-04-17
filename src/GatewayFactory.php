@@ -36,7 +36,7 @@ class GatewayFactory
      *
      * @param string $name The registered name of Gateway
      * @param array $options Options for gateway
-     * @return Larium\Pay\Gateway\Gateway
+     * @return \Larium\Pay\Gateway\Gateway
      */
     public static function create($name, array $options = [])
     {
