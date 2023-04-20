@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class RestClientTest extends TestCase
 {
-    public function testResourceUri()
+    public function testResourceUri(): void
     {
         $baseUri = 'https://api.example.com';
         $resource = 'payments';
@@ -25,7 +25,7 @@ class RestClientTest extends TestCase
         $this->assertEquals('https://api.example.com/payments', $uri);
     }
 
-    public function testResourceUriWithId()
+    public function testResourceUriWithId(): void
     {
         $baseUri = 'https://api.example.com';
         $resource = 'payments/%s/refund';
@@ -122,7 +122,7 @@ class RestClientTest extends TestCase
         ResponseInterface $response,
         string $resource = '',
         callable $fun = null
-    ): RestClient|MockObject {
+    ): RestClient | MockObject {
         /** @var RestClient|MockObject $mock */
         $mock =  $this->getMockBuilder(RestClient::class)
             ->onlyMethods(['discoverClient'])

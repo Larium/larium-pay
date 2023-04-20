@@ -19,7 +19,7 @@ class GatewayTest extends TestCase
     /**
      * @dataProvider getExecuteMethods
      */
-    public function testExecuteMethods($method, $transactionGetter)
+    public function testExecuteMethods($method, $transactionGetter): void
     {
         $transaction = $this->$transactionGetter();
 
@@ -39,7 +39,7 @@ class GatewayTest extends TestCase
      * @expectedException Larium\Pay\GatewayException
      * @expectedExceptionMessage Gateway `Larium\Pay\Gateway\TestGateway` does not support `Larium\Pay\Transaction\RefundTransaction
      */
-    public function testNotImplementMethods()
+    public function testNotImplementMethods(): void
     {
         $this->expectException(GatewayException::class);
         $this->expectExceptionMessage('Gateway `Larium\Pay\Gateway\TestGateway` does not support `Larium\Pay\Transaction\RefundTransaction');
@@ -49,7 +49,7 @@ class GatewayTest extends TestCase
         $bogus->execute($transaction);
     }
 
-    public function testQueryTransaction()
+    public function testQueryTransaction(): void
     {
         $g = $this->mockRestGatewayClient(
             'Larium\Pay\Gateway\MyRestGateway',
@@ -74,7 +74,7 @@ class GatewayTest extends TestCase
         $g->execute($txn);
     }
 
-    public function testCustomResponse()
+    public function testCustomResponse(): void
     {
         $gateway = new MyRestGateway(['username'=>'a', 'password'=>'b']);
 
@@ -87,7 +87,7 @@ class GatewayTest extends TestCase
         $this->assertArrayHasKey('message', $response);
     }
 
-    public static function getExecuteMethods()
+    public static function getExecuteMethods(): array
     {
         return [
             [
@@ -109,7 +109,7 @@ class GatewayTest extends TestCase
         ];
     }
 
-    private function getPurchaseTransaction()
+    private function getPurchaseTransaction(): PurchaseTransaction
     {
         return new PurchaseTransaction(
             1000,
@@ -117,7 +117,7 @@ class GatewayTest extends TestCase
         );
     }
 
-    private function getAuthorizeTransaction()
+    private function getAuthorizeTransaction(): AuthorizeTransaction
     {
         return new AuthorizeTransaction(
             1000,
@@ -125,7 +125,7 @@ class GatewayTest extends TestCase
         );
     }
 
-    private function getCaptureTransaction()
+    private function getCaptureTransaction(): CaptureTransaction
     {
         return new CaptureTransaction(
             1000,
@@ -133,7 +133,7 @@ class GatewayTest extends TestCase
         );
     }
 
-    public function getRefundTransaction()
+    public function getRefundTransaction(): RefundTransaction
     {
         return new RefundTransaction(
             1000,

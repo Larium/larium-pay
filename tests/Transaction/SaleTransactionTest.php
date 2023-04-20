@@ -14,7 +14,7 @@ class SaleTransactionTest extends TestCase
     /**
      * @expectedException Larium\Pay\TransactionException
      */
-    public function testCommitTransaction()
+    public function testCommitTransaction(): void
     {
         $this->expectException(TransactionException::class);
 
@@ -29,7 +29,7 @@ class SaleTransactionTest extends TestCase
         $txn->setDescription('Bogus payment');
     }
 
-    public function testTransactionExtraOptions()
+    public function testTransactionExtraOptions(): void
     {
         $amount = self::AMOUNT;
         $card = $this->getCard();
