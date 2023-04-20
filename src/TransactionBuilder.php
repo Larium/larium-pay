@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
-use ReflectionClass;
 use Larium\CreditCard\CreditCard;
+use ReflectionClass;
 
 /**
  * A fluent interface ({@link http://martinfowler.com/bliki/FluentInterface.html}) for creating transaction objects.

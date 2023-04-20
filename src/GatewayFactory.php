@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
 class GatewayFactory
 {
-    const GATEWAY_NAMESPACE = 'Larium\\Pay\\Gateway\\';
+    public const GATEWAY_NAMESPACE = 'Larium\\Pay\\Gateway\\';
 
     private static $gateways = [];
 
@@ -34,7 +36,7 @@ class GatewayFactory
      *
      * @param string $name The registered name of Gateway
      * @param array $options Options for gateway
-     * @return Larium\Pay\Gateway\Gateway
+     * @return \Larium\Pay\Gateway\Gateway
      */
     public static function create($name, array $options = [])
     {

@@ -1,31 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Gateway;
 
-use Larium\Pay\Response;
-use Larium\Pay\ParamsBag;
 use Larium\Pay\GatewayException;
-use Larium\Pay\Transaction\Query;
+use Larium\Pay\ParamsBag;
+use Larium\Pay\Response;
+use Larium\Pay\Transaction\Authorize;
 use Larium\Pay\Transaction\Cancel;
-use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Capture;
 use Larium\Pay\Transaction\Initial;
-use Larium\Pay\Transaction\Transfer;
 use Larium\Pay\Transaction\Purchase;
+use Larium\Pay\Transaction\Query;
+use Larium\Pay\Transaction\Refund;
 use Larium\Pay\Transaction\Retrieve;
-use Larium\Pay\Transaction\Authorize;
-use Larium\Pay\Transaction\Transaction;
 use Larium\Pay\Transaction\ThreedSecureAuthenticate;
+use Larium\Pay\Transaction\Transaction;
+use Larium\Pay\Transaction\Transfer;
+
+use function call_user_func_array;
 
 abstract class Gateway
 {
-    protected $sandbox;
+    protected bool $sandbox;
 
-    protected $options;
+    protected ParamsBag $options;
 
+    /**
+     * @var callable|null
+     */
     private $responseCallback;
 
-    private $transactionToMethod = [
+    private array $transactionToMethod = [
         Query::class => 'query',
         Cancel::class => 'cancel',
         Refund::class => 'refund',
@@ -47,7 +54,7 @@ abstract class Gateway
      * @param array $response
      * @return bool
      */
-    abstract protected function success(array $response);
+    abstract protected function success(array $response): bool;
 
     /**
      * Returns the message from gateway response.
@@ -58,7 +65,7 @@ abstract class Gateway
      * @param array $response
      * @return string
      */
-    abstract protected function message(array $response);
+    abstract protected function message(array $response): string;
 
     /**
      * Returns th unique transaction id from gateway response.
@@ -67,9 +74,9 @@ abstract class Gateway
      * parsed as associative array, including http status and headers.
      *
      * @param array $response
-     * @return string
+     * @return string|null
      */
-    abstract protected function transactionId(array $response);
+    abstract protected function transactionId(array $response): ?string;
 
     /**
      * Returns error code from gateway if exists.
@@ -80,7 +87,7 @@ abstract class Gateway
      * @param array $response
      * @return string|null
      */
-    abstract protected function errorCode(array $response);
+    abstract protected function errorCode(array $response): ?string;
 
     /**
      * Returns response code from card processing, if exists.
@@ -92,7 +99,7 @@ abstract class Gateway
      * @param array $response
      * @return string|null
      */
-    abstract protected function responseCode(array $response);
+    abstract protected function responseCode(array $response): ?string;
 
     final public function __construct(array $options = [])
     {
@@ -104,7 +111,7 @@ abstract class Gateway
     public function execute(
         Transaction $transaction,
         callable $responseCallback = null
-    ) {
+    ): mixed {
         $transaction->commit();
 
         $this->responseCallback = $responseCallback;
@@ -120,52 +127,52 @@ abstract class Gateway
         );
     }
 
-    protected function purchase(Purchase $transaction)
+    protected function purchase(Purchase $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function authorize(Authorize $transaction)
+    protected function authorize(Authorize $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function capture(Capture $transaction)
+    protected function capture(Capture $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function refund(Refund $transaction)
+    protected function refund(Refund $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function cancel(Cancel $transaction)
+    protected function cancel(Cancel $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function retrieve(Retrieve $transaction)
+    protected function retrieve(Retrieve $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function initiate(Initial $transaction)
+    protected function initiate(Initial $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function query(Query $transaction)
+    protected function query(Query $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function threedSecureAuthenticate(ThreedSecureAuthenticate $transaction)
+    protected function threedSecureAuthenticate(ThreedSecureAuthenticate $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
 
-    protected function transfer(Transfer $transaction)
+    protected function transfer(Transfer $transaction): mixed
     {
         throw GatewayException::notImplemented(get_class($transaction), get_class($this));
     }
@@ -185,7 +192,7 @@ abstract class Gateway
      * @param string $rawResponse   The raw response of gateway.
      * @param string $rawRequest    The raw request to gateway.
      *
-     * @return Larium\Pay\Response|mixed Response may be a user response if $responseCallback
+     * @return \Larium\Pay\Response|mixed Response may be a user response if $responseCallback
      *                                   param is used in execute method
      */
     protected function createResponse(
@@ -197,7 +204,7 @@ abstract class Gateway
         array $payload = [],
         $rawResponse = null,
         $rawRequest = null
-    ) {
+    ): mixed {
         $response = new Response(
             $success,
             $message,

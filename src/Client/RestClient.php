@@ -1,97 +1,95 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Client;
 
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Message\Authentication\BasicAuth;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Message\Authentication\BasicAuth;
-use Http\Discovery\MessageFactoryDiscovery;
 
 class RestClient extends AbstractClient
 {
-    private $baseUri;
+    private string $username = '';
 
-    private $resource;
+    private string $pass = '';
 
-    private $username;
-
-    private $pass;
-
-    private $headerAuthentication = [];
-
-    private $headers = [];
+    private array $headerAuthentication = [];
 
     public function __construct(
-        $baseUri,
-        $resource,
-        array $headers = [],
+        private readonly string $baseUri,
+        private readonly string $resource,
+        private array $headers = [],
         array $options = []
     ) {
-        $this->baseUri = $baseUri;
-        $this->headers = $headers;
         $this->options = $options;
-        $this->resource = $resource;
     }
 
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
         $this->headers[$name] = $value;
     }
 
-    public function get($id = null, $payload = null)
+    public function get(string $id = null, string|array $payload = ''): array
     {
-        $factory = $this->getMessageFactory();
         $uri = $this->getUri($id);
         if ($query = $this->normalizePayload($payload)) {
             $uri = $uri . '?' . ltrim($query, '?');
         }
-        $request = $factory->createRequest(
-            'GET',
-            $uri,
-            $this->headers
-        );
 
-        $request = $this->authenticate($request);
-
-        return $this->resolveResponse($this->sendRequest($request));
+        return $this->request($uri, 'GET');
     }
 
-    public function post($payload)
+    public function post(string|array $payload): array
     {
         return $this->request($this->getUri(), 'POST', $payload);
     }
 
-    public function put($id, $payload = null)
+    public function put(string $id, string|array $payload = ''): array
     {
         $uri = $this->getUri($id);
 
         return $this->request($uri, 'PUT', $payload);
     }
 
-    private function request($uri, $method, $payload = null)
-    {
-        $factory = $this->getMessageFactory();
+    private function request(
+        string $uri,
+        string $method,
+        string|array $payload = ''
+    ): array {
+        $factory = Psr17FactoryDiscovery::findRequestFactory();
         $request = $factory->createRequest(
             $method,
-            $uri,
-            $this->headers,
-            $this->normalizePayload($payload)
+            $uri
         );
+
+        foreach ($this->headers as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        }
+
+        if (is_array($payload)) {
+            $payload = $this->normalizePayload($payload);
+        }
+
+        if (!empty($payload)) {
+            $stream = Psr17FactoryDiscovery::findStreamFactory()->createStream($payload);
+            $request = $request->withBody($stream);
+        }
 
         $request = $this->authenticate($request);
 
         return $this->resolveResponse($this->sendRequest($request));
     }
 
-    public function delete($id)
+    public function delete(string $id): array
     {
         $uri = $this->getUri($id);
 
         return $this->request($uri, 'DELETE');
     }
 
-    public function getUri($id = null)
+    public function getUri(string $id = null): string
     {
         $uri = $this->resource
             ? sprintf('%s/%s', $this->baseUri, $this->resource)
@@ -104,20 +102,22 @@ class RestClient extends AbstractClient
         return $uri;
     }
 
-    public function setBasicAuthentication($username, $password)
-    {
+    public function setBasicAuthentication(
+        string $username,
+        string $password
+    ): void {
         $this->username = $username;
         $this->pass = $password;
     }
 
-    public function setHeaderAuthentication($name, $value)
+    public function setHeaderAuthentication(string $name, string $value): void
     {
         $this->headerAuthentication = ['name' => $name, 'value' => $value];
     }
 
-    protected function authenticate(RequestInterface $request)
+    protected function authenticate(RequestInterface $request): RequestInterface
     {
-        if ($this->username || $this->pass) {
+        if (!empty($this->username) || !empty($this->pass)) {
             $authentication = new BasicAuth($this->username, $this->pass);
 
             return $authentication->authenticate($request);
@@ -135,18 +135,13 @@ class RestClient extends AbstractClient
         return $request;
     }
 
-    private function normalizePayload($payload)
+    private function normalizePayload(string|array $payload): string
     {
-        if (is_array($payload)) {
-            return http_build_query($payload);
+        if (is_string($payload)) {
+            return $payload;
         }
 
-        return $payload;
-    }
-
-    private function getMessageFactory()
-    {
-        return MessageFactoryDiscovery::find();
+        return http_build_query($payload);
     }
 
     /**
@@ -161,17 +156,17 @@ class RestClient extends AbstractClient
      *              'raw_response': The raw body response for logging purposes.
      *              'raw_request': The raw body request for logging purposes.
      */
-    protected function resolveResponse(ResponseInterface $response)
+    protected function resolveResponse(ResponseInterface $response): array
     {
         $body = $response->getBody()->__toString();
         $responseBody = json_decode($body, true) ?: [];
 
-        return array(
+        return [
             'status' => $response->getStatusCode(),
             'headers' => $response->getHeaders(),
             'body' => $responseBody,
             'raw_response' => $body,
             'raw_request' => $this->rawRequest,
-        );
+        ];
     }
 }

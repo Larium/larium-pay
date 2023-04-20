@@ -1,0 +1,12 @@
+version: "3.1"
+services:
+  php-cli:
+    build: .docker
+    container_name: larium-pay
+    image: larium-pay:latest
+    working_dir: /opt/php
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/opt/php
+      - .docker/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Transaction;
 
+use Larium\CreditCard\CreditCard;
 use Larium\Pay\ParamsBag;
 use Larium\Pay\Transaction\Sale;
-use Larium\CreditCard\CreditCard;
 
 abstract class SaleTransaction implements Sale
 {

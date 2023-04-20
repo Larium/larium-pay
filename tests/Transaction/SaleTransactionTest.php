@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Transaction;
 
 use Larium\Pay\TestCase;
+use Larium\Pay\TransactionException;
 
 class SaleTransactionTest extends TestCase
 {
-    const AMOUNT = 1000;
+    public const AMOUNT = 1000;
 
     /**
      * @expectedException Larium\Pay\TransactionException
      */
-    public function testCommitTransaction()
+    public function testCommitTransaction(): void
     {
+        $this->expectException(TransactionException::class);
+
         $amount = self::AMOUNT;
         $card = $this->getCard();
 
@@ -24,7 +29,7 @@ class SaleTransactionTest extends TestCase
         $txn->setDescription('Bogus payment');
     }
 
-    public function testTransactionExtraOptions()
+    public function testTransactionExtraOptions(): void
     {
         $amount = self::AMOUNT;
         $card = $this->getCard();

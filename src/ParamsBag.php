@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
-use Iterator;
 use ArrayAccess;
+use Iterator;
 
 class ParamsBag implements Iterator, ArrayAccess
 {
@@ -12,9 +14,9 @@ class ParamsBag implements Iterator, ArrayAccess
      *
      * @var array
      */
-    private $params = array();
+    private $params = [];
 
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->params = $params;
     }
@@ -54,7 +56,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->params);
     }
@@ -78,7 +80,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         next($this->params);
     }
@@ -86,7 +88,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
         return current($this->params) !== false;
     }
@@ -94,7 +96,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->params[] = $value;
@@ -106,7 +108,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->params);
     }
@@ -114,7 +116,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->params[$offset]);
     }

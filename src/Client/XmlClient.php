@@ -1,25 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Client;
 
+use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
 
 class XmlClient extends AbstractClient
 {
-    private $uri;
+    private array $headers = [];
 
-    private $headers = [];
-
-    public function __construct($uri, array $options = [])
-    {
-        $this->uri = $uri;
+    public function __construct(
+        private readonly string $uri,
+        array $options = []
+    ) {
         $this->options = $options;
     }
 
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
         $this->headers[$name] = $value;
     }
@@ -30,17 +30,18 @@ class XmlClient extends AbstractClient
      * @param string $xml
      * @return array @see self::resolveResponse
      */
-    public function post($xml)
+    public function post(string $xml): array
     {
-        $factory = $this->getMessageFactory();
-        $request = $factory->createRequest('POST', $this->uri, $this->headers, $xml);
+        $factory = Psr17FactoryDiscovery::findRequestFactory();
+        $request = $factory->createRequest('POST', $this->uri);
+        foreach ($this->headers as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        };
+
+        $body = Psr17FactoryDiscovery::findStreamFactory()->createStream($xml);
+        $request = $request->withBody($body);
 
         return $this->resolveResponse($this->sendRequest($request));
-    }
-
-    private function getMessageFactory()
-    {
-        return MessageFactoryDiscovery::find();
     }
 
     /**
@@ -54,20 +55,20 @@ class XmlClient extends AbstractClient
      *              'raw_response': The raw body response for logging purposes.
      *              'raw_request' : The raw body request for logging purposes.
      */
-    protected function resolveResponse(ResponseInterface $response)
+    protected function resolveResponse(ResponseInterface $response): array
     {
         $body = $response->getBody()->__toString();
 
-        return array(
+        return [
             'status' => $response->getStatusCode(),
             'headers' => $response->getHeaders(),
             'body' => $body,
             'raw_response' => $body,
             'raw_request' => $this->rawRequest,
-        );
+        ];
     }
 
-    protected function authenticate(RequestInterface $request)
+    protected function authenticate(RequestInterface $request): RequestInterface
     {
         return $request;
     }

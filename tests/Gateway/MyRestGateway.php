@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay\Gateway;
 
 use Larium\Pay\Client\RestClient;
-use Larium\Pay\Transaction\Query;
+use Larium\Pay\Response;
 use Larium\Pay\Transaction\Purchase;
+use Larium\Pay\Transaction\Query;
 
 class MyRestGateway extends RestGateway
 {
-    const URI = 'https://api.example.com/v1';
+    public const URI = 'https://api.example.com/v1';
 
-    const QUERY = 'payments';
+    public const QUERY = 'payments';
 
-    protected function getBaseUri()
+    protected function getBaseUri(): string
     {
         return self::URI;
     }
 
-    public function purchase(Purchase $transaction)
+    public function purchase(Purchase $transaction): mixed
     {
         return $this->getResponse([
             'status' => 200,
@@ -27,33 +30,37 @@ class MyRestGateway extends RestGateway
         ]);
     }
 
-    protected function authenticate(RestClient $client)
+    protected function authenticate(RestClient $client): void
+    {
+        return;
+    }
+
+    protected function success(array $response): bool
     {
         return true;
     }
 
-    protected function success(array $response)
+    protected function message(array $response): string
     {
-        return true;
+        return '';
     }
 
-    protected function message(array $response)
+    protected function transactionId(array $response): ?string
     {
+        return '';
     }
 
-    protected function transactionId(array $response)
+    protected function errorCode(array $response): ?string
     {
+        return null;
     }
 
-    protected function errorCode(array $response)
+    protected function responseCode(array $response): ?string
     {
+        return null;
     }
 
-    protected function responseCode(array $response)
-    {
-    }
-
-    protected function query(Query $transaction)
+    protected function query(Query $transaction): mixed
     {
         $payload = $transaction->getCriteria();
 

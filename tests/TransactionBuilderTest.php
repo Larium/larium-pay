@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
 class TransactionBuilderTest extends TestCase
 {
-    const AMOUNT = 1000;
+    public const AMOUNT = 1000;
 
     public function testPurchaseBuild()
     {

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Larium\Pay;
 
-use Closure;
 use XMLWriter;
 
 /**
