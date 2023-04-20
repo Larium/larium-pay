@@ -11,9 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class RestClient extends AbstractClient
 {
-    private string $username;
+    private string $username = '';
 
-    private string $pass;
+    private string $pass = '';
 
     private array $headerAuthentication = [];
 
@@ -117,7 +117,7 @@ class RestClient extends AbstractClient
 
     protected function authenticate(RequestInterface $request): RequestInterface
     {
-        if ($this->username || $this->pass) {
+        if (!empty($this->username) || !empty($this->pass)) {
             $authentication = new BasicAuth($this->username, $this->pass);
 
             return $authentication->authenticate($request);
