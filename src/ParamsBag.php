@@ -21,24 +21,24 @@ class ParamsBag implements Iterator, ArrayAccess
         $this->params = $params;
     }
 
-    public function get($name, $default = null)
+    public function get(mixed $name, mixed $default = null): mixed
     {
         return $this->offsetExists($name)
             ? $this->offsetGet($name)
             : $default;
     }
 
-    public function __get($name)
+    public function __get(mixed $name): mixed
     {
         return $this->offsetGet($name);
     }
 
-    public function __set($name, $value)
+    public function __set(mixed $name, mixed $value): void
     {
         $this->offsetSet($name, $value);
     }
 
-    public function __isset($name)
+    public function __isset($name): bool
     {
         return $this->offsetExists($name);
     }
@@ -48,7 +48,7 @@ class ParamsBag implements Iterator, ArrayAccess
      *
      * @return array
      */
-    public function getArrayCopy()
+    public function getArrayCopy(): array
     {
         return $this->params;
     }
@@ -64,7 +64,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->params);
     }
@@ -72,7 +72,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->params);
     }
@@ -124,7 +124,7 @@ class ParamsBag implements Iterator, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         $value = isset($this->params[$offset])
             ? $this->params[$offset]
